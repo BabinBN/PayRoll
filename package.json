@@ -2,7 +2,19 @@
   "name": "PayRoll-cds",
   "version": "1.0.0",
   "devDependencies": {
-    "@sap/cds-dk": "^9.7.2"
+    "@cap-js/hana": "^2.8.0",
+    "@sap/cds": "^9.9.3",
+    "@sap/cds-dk": "^9.9.4",
+    "mbt": "^1.2.49",
+    "rimraf": "^5.0.5"
   },
-  "dependencies": {}
+  "sapux": [
+    "app/employee",
+    "app/employee"
+  ],
+  "scripts": {
+    "undeploy": "cf undeploy PayRoll --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+  }
 }
