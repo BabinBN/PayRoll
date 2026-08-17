@@ -1,29 +1,77 @@
 <core:FragmentDefinition
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
-    xmlns:u="sap.ui.unified">
+    xmlns:u="sap.ui.unified"
+    xmlns:layout="sap.ui.layout">
 
-    <Dialog id="uploadDialog" title="Upload Excel" contentWidth="400px">
+    <Dialog
+        id="uploadExcelDialog"
+        title="Upload Employees"
+        contentWidth="480px"
+        verticalScrolling="false"
+        state="None">
 
         <content>
-            <VBox class="sapUiSmallMargin" gap="1rem">
-                <Text text="Select an Excel file (.xlsx)"/>
+
+            <VBox class="sapUiMediumMargin" width="auto">
+
+                <MessageStrip
+                    text="Select an Excel file (.xlsx or .xls) containing employee records to import. Existing entries with matching Employee Codes will not be automatically merged."
+                    type="Information"
+                    showIcon="true"
+                    showCloseButton="false"
+                    class="sapUiSmallMarginBottom" />
+
+                <VBox
+                    class="sapUiSmallMarginBottom"
+                    alignItems="Center"
+                    justifyContent="Center"
+                    renderType="Bare">
+
+                    <core:Icon
+                        src="sap-icon://attachment-text-file"
+                        size="2.5rem"
+                        color="#0854a0"
+                        class="sapUiSmallMarginBottom" />
+
+                </VBox>
 
                 <u:FileUploader
                     id="excelUploader"
                     width="100%"
                     fileType="xlsx,xls"
+                    change="onFileChange"
                     placeholder="Choose Excel file"
-                    change="onFileChange"/>
+                    icon="sap-icon://upload"
+                    buttonText="Browse"
+                    style="Emphasized"
+                    class="sapUiSmallMarginBottom" />
+
+                <ObjectStatus
+                    id="uploadStatusText"
+                    text="No file selected"
+                    icon="sap-icon://document"
+                    state="None"
+                    class="sapUiTinyMarginTop" />
+
             </VBox>
+
         </content>
 
         <beginButton>
-            <Button text="Upload" type="Emphasized" press="onConfirmUpload"/>
+            <Button
+                id="uploadBeginButton"
+                text="Upload"
+                type="Emphasized"
+                icon="sap-icon://upload-to-cloud"
+                press="onUploadPress"
+                enabled="false" />
         </beginButton>
 
         <endButton>
-            <Button text="Cancel" press="onCloseUploadDialog"/>
+            <Button
+                text="Cancel"
+                press="onCloseUploadDialog" />
         </endButton>
 
     </Dialog>

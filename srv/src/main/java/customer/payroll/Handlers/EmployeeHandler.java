@@ -9,19 +9,18 @@ import com.sap.cds.services.ServiceException;
 import com.sap.cds.services.cds.CdsCreateEventContext;
 import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
-import com.sap.cds.services.handler.annotations.On;
+import com.sap.cds.services.handler.annotations.Before;
 import com.sap.cds.services.handler.annotations.ServiceName;
 
 @Component
 @ServiceName("Employee")
 public class EmployeeHandler implements EventHandler {
     @SuppressWarnings("unused")
-    @On(event = CqnService.EVENT_CREATE, entity = "Employee.Employees")
+    @Before(event = CqnService.EVENT_CREATE, entity = "Employee.Employees")
     public void onCreateEmployee(CdsCreateEventContext context) {
 
         Map<String, Object> data = context.getCqn().entries().get(0);
 
-        // Read all fields
         String empCode = (String) data.get("emp_code");
         Integer companyId = data.get("company_id") != null
                 ? ((Number) data.get("company_id")).intValue()
@@ -53,7 +52,6 @@ public class EmployeeHandler implements EventHandler {
 
         String status = (String) data.get("status");
 
-        // Simple validations
         if (empCode == null || empCode.isBlank()) {
             throw new ServiceException(ErrorStatuses.BAD_REQUEST,
                     "Employee Code is mandatory");
@@ -69,7 +67,6 @@ public class EmployeeHandler implements EventHandler {
                     "Email is mandatory");
         }
 
-        // Default values
         if (status == null || status.isBlank()) {
             data.put("status", "Active");
         }

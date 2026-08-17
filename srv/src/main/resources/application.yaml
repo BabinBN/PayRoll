@@ -1,10 +1,10 @@
 
----
-spring:
-  config.activate.on-profile: default
-  sql.init.platform: h2
-cds:
-  data-source.auto-config.enabled: false
+# ---
+# spring:
+#   config.activate.on-profile: default
+#   sql.init.platform: h2
+# cds:
+#   data-source.auto-config.enabled: false
 ---
 management:
   endpoint:
@@ -17,11 +17,16 @@ management:
       exposure:
         include: health
 cds:
+  data-source:             #  inside cds
+    auto-config:
+      enabled: true
+
   security:
     authentication:
       authConfig:
         enabled: false
-  health:
+
+  health:                  #  inside cds
     defaults:
       enabled: false
     ping:

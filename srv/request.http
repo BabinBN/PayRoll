@@ -1,0 +1,50 @@
+POST http://localhost:8080/odata/v4/service/Empdt/Employees
+Content-Type: application/json
+
+{
+  "emp_code": "EMP002",
+  "company_id": 1002,
+  "external_emp_id": "EXT002",
+  "first_name": "Priya",
+  "middle_name": "Kumar",
+  "last_name": "Sharma",
+  "gender": "Female",
+  "marital_status": "Married",
+  "dob": "1992-08-21",
+  "email": "priya.sharma@example.com",
+  "mobile": "9123456780",
+  "nationality": "Indian",
+  "time_process": "Monthly",
+  "payroll_period_id": 2,
+  "joined_date": "2023-06-12",
+  "employment_status_id": 1,
+  "final_payment_status": false,
+  "status": "Active"
+}
+
+###
+
+POST http://localhost:8080/odata/v4/service/Empdt/Employees(ID=57cb9b9e-dbfd-4db4-964b-7e590aa0c155,IsActiveEntity=false)/Employee.draftActivate
+Content-Type: application/json
+
+{}
+
+###
+PATCH http://localhost:8080/odata/v4/service/Empdt/Employees(ID=57cb9b9e-dbfd-4db4-964b-7e590aa0c155,IsActiveEntity=false)
+Content-Type: application/json
+
+{
+  "mobile": "9876543210",
+  "email": "briya.sharma@company.com"
+}
+
+//for draftEdit
+###
+POST http://localhost:8080/odata/v4/service/Empdt/Employees(ID=57cb9b9e-dbfd-4db4-964b-7e590aa0c155,IsActiveEntity=true)/Employee.draftEdit
+Content-Type: application/json
+
+{}
+
+//for draftDiscard
+###
+POST /Employees(ID=123,IsActiveEntity=false)/Employee.draftDiscard

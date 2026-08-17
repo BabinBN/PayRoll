@@ -66,6 +66,15 @@
         "sap.fe.templates": {}
       }
     },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "employee.ext.controller.ListReportExt"
+          }
+        }
+      }
+    },
     "contentDensities": {
       "compact": true,
       "cozy": true
@@ -131,7 +140,6 @@
                   },
                   "actions": {
                     "uploadexcel": {
-                      "press": "employee.ext.controller.ListReportExt.onUploadExcel",
                       "visible": true,
                       "enabled": true,
                       "requiresSelection": false,
