@@ -128,16 +128,14 @@
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "ResponsiveTable"
-                  }
-                },
-                "": {
+                  },
                   "actions": {
                     "uploadexcel": {
-                      "press": "employee.ext.controller.Handler.onUploadExcel",
+                      "press": "employee.ext.controller.ListReportExt.onUploadExcel",
                       "visible": true,
                       "enabled": true,
                       "requiresSelection": false,
-                      "text": "upload excel"
+                      "text": "Upload Excel"
                     }
                   }
                 }

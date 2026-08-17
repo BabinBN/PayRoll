@@ -5,8 +5,7 @@ service Employee
 {
     @cds.redirection.target
     @odata.draft.enabled
-    entity Employees as
-        projection on Emp.Employees;
+    entity Employees as projection on Emp.Employees;
 }
 
 // annotate Employee with @requires :

@@ -16,5 +16,8 @@
     "undeploy": "cf undeploy PayRoll --delete-services --delete-service-keys --delete-service-brokers",
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+  },
+  "dependencies": {
+    "xlsx": "^0.18.5"
   }
 }
