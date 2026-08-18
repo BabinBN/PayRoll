@@ -2,29 +2,97 @@ POST http://localhost:8080/odata/v4/service/Empdt/Employees
 Content-Type: application/json
 
 {
-  "emp_code": "EMP002",
-  "company_id": 1002,
-  "external_emp_id": "EXT002",
-  "first_name": "Priya",
-  "middle_name": "Kumar",
-  "last_name": "Sharma",
-  "gender": "Female",
-  "marital_status": "Married",
-  "dob": "1992-08-21",
-  "email": "priya.sharma@example.com",
-  "mobile": "9123456780",
-  "nationality": "Indian",
-  "time_process": "Monthly",
-  "payroll_period_id": 2,
-  "joined_date": "2023-06-12",
-  "employment_status_id": 1,
-  "final_payment_status": false,
-  "status": "Active"
+    "company_id": 1001,
+    "dob": "1995-05-15",
+    "email": "briya.sharma@company.com",
+    "emp_code": "EMP001",
+    "employment_status_id": 1,
+    "external_emp_id": "EXT001",
+    "final_payment_status": false,
+    "first_name": "Briya",
+    "gender": "Female",
+    "joined_date": "2024-10-14",
+    "last_name": "Sharma",
+    "marital_status": "Single",
+    "middle_name": "Kumari",
+    "mobile": "9876543210",
+    "nationality": "Indian",
+    "payroll_period_id": 10,
+    "status": "Active",
+    "time_process": "Monthly",
+
+    "jobDetails": 
+        {
+            "employment_type": "Permanent",
+            "start_date": "2024-10-14",
+            "end_date": "2026-12-31",
+            "status": 1
+        }
+    ,
+
+    "positions": 
+        {
+            "position": "Software Developer",
+            "position_id": "POS001",
+            "grade": 5,
+            "start_date": "2024-10-14",
+            "end_date": "2026-12-31",
+            "reporting_head": 100,
+            "status": 1,
+            "is_reporting_head": 0
+        }
+    ,
+
+    "workshiftDetails": 
+        {
+            "work_shift_pattern_id": 10,
+            "start_date": "2024-10-14",
+            "end_date": "2026-12-31",
+            "leave_calendar_id": 1,
+            "holiday_calendar_id": 2,
+            "status": 1
+        }
+    ,
+
+    "bankDetails": [
+        {
+            "bank_key": 101,
+            "bank_name": "ABC Bank",
+            "branch": "Bangalore",
+            "account_name": "Briya Sharma",
+            "account_no": "1234567890",
+            "iban_no": "AE1234567890",
+            "account_type": 1,
+            "payment_mode": 1,
+            "allocation": "Salary",
+            "reference": "SAL001",
+            "status": 1
+        }
+    ],
+
+    "additionalInformation": {
+        "wps_personal_no": 123456,
+        "contract_no": "CON001",
+        "contract_type": "Permanent",
+        "accomodation_type": "Company",
+        "doctrine": "Standard",
+        "unified_no": 123456,
+        "sponsor_name": "ABC Company",
+        "account_iban_no": "AE1234567890",
+        "emirates_id": "784-1234-1234567-1",
+        "payroll_lock": 0,
+        "profile": "Employee Profile",
+        "logo_path": "/images/logo.png",
+        "emp_type": "Full Time",
+        "first_name_arabic": "بريا",
+        "middle_name_arabic": "كوماري",
+        "last_name_arabic": "شارما"
+    }
 }
 
 ###
 
-POST http://localhost:8080/odata/v4/service/Empdt/Employees(ID=57cb9b9e-dbfd-4db4-964b-7e590aa0c155,IsActiveEntity=false)/Employee.draftActivate
+POST http://localhost:8080/odata/v4/service/Empdt/Employees(ID=1fc0a844-27f8-4772-9058-1231f3e5dd10,IsActiveEntity=false)/Employee.draftActivate
 Content-Type: application/json
 
 {}
@@ -40,11 +108,19 @@ Content-Type: application/json
 
 //for draftEdit
 ###
-POST http://localhost:8080/odata/v4/service/Empdt/Employees(ID=57cb9b9e-dbfd-4db4-964b-7e590aa0c155,IsActiveEntity=true)/Employee.draftEdit
+POST http://localhost:8080/odata/v4/service/Empdt/Employees(ID=61c75fcc-25ac-4eaf-8dfe-b8ef51c03c56,IsActiveEntity=true)/Employee.draftEdit
 Content-Type: application/json
 
 {}
 
 //for draftDiscard
 ###
-POST /Employees(ID=123,IsActiveEntity=false)/Employee.draftDiscard
+DELETE http://localhost:8080/odata/v4/service/Empdt/Employees(ID=61c75fcc-25ac-4eaf-8dfe-b8ef51c03c56,IsActiveEntity=false)
+
+//Get Employees
+###
+GET http://localhost:8080/odata/v4/service/Empdt/Employees(ID=57cb9b9e-dbfd-4db4-964b-7e590aa0c155,IsActiveEntity=true)
+
+
+###
+GET http://localhost:8080/odata/v4/service/Empdt/$metadata
