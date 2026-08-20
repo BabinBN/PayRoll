@@ -80,9 +80,23 @@ modules:
       - employee.zip
       name: employee
       target-path: resources/
+    - artifacts:
+      - employeeleaves.zip
+      name: employeeleaves
+      target-path: resources/
 - name: employee
   type: html5
   path: app/employee
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: employeeleaves
+  type: html5
+  path: app/employee_leaves
   build-parameters:
     build-result: dist
     builder: custom

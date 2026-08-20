@@ -75,11 +75,6 @@ annotate service.Employees with @(
         },
         {
             $Type : 'UI.DataField',
-            Value : status,
-            Label : 'Status',
-        },
-        {
-            $Type : 'UI.DataField',
             Value : time_process,
             Label : 'Time Process',
         },
@@ -311,9 +306,9 @@ annotate service.Employees with @(
     UI.SelectionFields : [
         emp_code,
         joined_date,
-        status,
-        jobDetails.employment_type,
         external_emp_id,
+        status_ID,
+        additionalInformation.emp_type_ID,
     ],
 );
 
@@ -395,18 +390,18 @@ annotate service.Employees with {
         Common.Label : 'Status',
         Common.ValueList : {
             $Type : 'Common.ValueListType',
-            CollectionPath : 'Employees',
+            CollectionPath : 'Status',
             Parameters : [
                 {
                     $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : status,
-                    ValueListProperty : 'status',
+                    LocalDataProperty : status_ID,
+                    ValueListProperty : 'ID',
                 },
             ],
-            Label : 'Satatus',
+            Label : 'Status',
         },
         Common.ValueListWithFixedValues : true,
-    )
+        )
 };
 
 annotate service.EmployeeJobDetails with {
@@ -431,4 +426,35 @@ annotate service.EmployeeJobDetails with {
 annotate service.Employees with {
     external_emp_id @Common.Label : 'Employee External Code'
 };
+
+annotate service.Status with {
+    ID @(
+        Common.Text : Name_status,
+        Common.Text.@UI.TextArrangement : #TextOnly,
+)};
+
+annotate service.EmployeeAdditionalInformation with {
+    emp_type @(
+        Common.Label : 'Employee Type',
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'EmploymentTypes',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : emp_type_ID,
+                    ValueListProperty : 'ID',
+                },
+            ],
+            Label : 'Employee Type',
+        },
+        Common.ValueListWithFixedValues : true,
+    )
+};
+
+annotate service.EmploymentTypes with {
+    ID @(
+        Common.Text : employeement_Type_Name,
+        Common.Text.@UI.TextArrangement : #TextOnly,
+)};
 

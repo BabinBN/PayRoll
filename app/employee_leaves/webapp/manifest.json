@@ -1,0 +1,164 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "employeeleaves",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.31.0",
+      "toolsId": "a943f4c8-6c36-4f04-a08f-591178e0ffd5"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/service/Empdt/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Employee_Leaves-manageLeaves": {
+          "semanticObject": "Employee_Leaves",
+          "action": "manageLeaves",
+          "title": "{{Employee_Leaves-manageLeaves.flpTitle}}",
+          "subTitle": "{{Employee_Leaves-manageLeaves.flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.151.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "employeeleaves.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "EmployeeLeavesList",
+          "target": "EmployeeLeavesList"
+        },
+        {
+          "pattern": "EmployeeLeaves({key}):?query:",
+          "name": "EmployeeLeavesObjectPage",
+          "target": "EmployeeLeavesObjectPage"
+        }
+      ],
+      "targets": {
+        "EmployeeLeavesList": {
+          "type": "Component",
+          "id": "EmployeeLeavesList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/EmployeeLeaves",
+              "variantManagement": "Page",
+              "navigation": {
+                "EmployeeLeaves": {
+                  "detail": {
+                    "route": "EmployeeLeavesObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "GridTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "EmployeeLeavesObjectPage": {
+          "type": "Component",
+          "id": "EmployeeLeavesObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/EmployeeLeaves"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "payroll_BN"
+  }
+}

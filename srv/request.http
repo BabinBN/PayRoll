@@ -124,3 +124,11 @@ GET http://localhost:8080/odata/v4/service/Empdt/Employees(ID=57cb9b9e-dbfd-4db4
 
 ###
 GET http://localhost:8080/odata/v4/service/Empdt/$metadata
+
+###Status
+
+GET http://localhost:8080/odata/v4/service/Empdt/Status
+
+
+###EmploymentTypes
+GET http://localhost:8080/odata/v4/service/Empdt/EmploymentTypes
