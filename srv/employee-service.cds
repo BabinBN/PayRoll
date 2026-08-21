@@ -14,7 +14,7 @@ service Employee {
     @readonly
     entity EmploymentTypes as projection on enum.employeement_Type;
     
-    @odata.draft.enabled
+    // @odata.draft.enabled
     entity EmployeeLeaves as projection on Emp.EmployeeLeaves;
 }
 

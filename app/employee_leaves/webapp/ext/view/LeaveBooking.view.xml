@@ -1,0 +1,385 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:uxap="sap.uxap"
+    xmlns:tnt="sap.tnt"
+    xmlns:table="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:smartForm="sap.ui.comp.smartform"
+    xmlns:smartField="sap.ui.comp.smartfield"
+    xmlns:card="sap.f.cards"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    controllerName="employeeleaves.ext.controller.LeaveBooking"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:layout="sap.ui.layout">
+    <f:DynamicPage id="page_BookLeaveOnDuty" showFooter="{=!!${errors>/}.length}">
+        <!-- DynamicPage Title -->
+        <f:title>
+            <f:DynamicPageTitle id="es">
+                <f:heading>
+                    <Title id="fe" text="{i18n>lod_BulkLeaveOnDutyBooking}" />
+                </f:heading>
+                <f:actions>
+                    <!-- <Button id="btnSave" type="Emphasized" text="{i18n>mls_save}"
+                    press="bulkPostLeave" class="sapUiTinyMarginBegin" /> -->
+                    <Button id="btnSaveClose" type="Transparent" text="{i18n>mls_save_close}"
+                        press="bulkPostLeave" />
+                    <Button id="btnClose" type="Transparent" text="{i18n>mls_close}"
+                        class="sapUiTinyMarginBegin" press="handleClose" />
+                </f:actions>
+                <f:navigationActions>
+                    <OverflowToolbarButton type="Transparent" icon="sap-icon://full-screen"
+                        press="handleFullScreen" id="enterFullScreenBtn"
+                        tooltip="Enter Full Screen Mode"
+                        visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }" />
+                    <OverflowToolbarButton type="Transparent" icon="sap-icon://exit-full-screen"
+                        press="handleExitFullScreen" id="exitFullScreenBtn"
+                        tooltip="Exit Full Screen Mode"
+                        visible="{parts:['/actionButtonsInfo/midColumn/exitFullScreen' , 'leaveBookingMdl>/item'], formatter:'.formatter.showHideFullScreen'}" />
+                    <OverflowToolbarButton id="e" type="Transparent" icon="sap-icon://decline"
+                        press="handleClose" tooltip="Close end column"
+                        visible="{= ${/actionButtonsInfo/midColumn/closeColumn} !== null }" />
+                </f:navigationActions>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:content>
+            <VBox id="VBox_Main_id">
+                <VBox>
+                    <HBox alignItems="End" justifyContent="End">
+                        <!-- <Button id="btn_addEmployee" text="Add Employee"
+                        class="sapUiSmallMarginEnd" type="Ghost" press="valueHelpDialogEmployee"/> -->
+                        <Button id="btn_addBulkEmployee" text="{i18n>lod_addEmployee's}"
+                            type="Ghost" press="onPressAddRowHeader" />
+                    </HBox>
+                </VBox>
+                <VBox id="VBox_id" items="{leaveBookingMdl>/}">
+                    <Panel expandable="true" width="auto" class="sapUiResponsiveMargin">
+                        <headerToolbar>
+                            <OverflowToolbar active="true" press="onOverflowToolbarPress">
+                                <HBox>
+                                    <Label text="{i18n>lod_Employee}"
+                                        class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop"
+                                        required="true" />
+
+                                    <Input id="empID" class="sapUiSmallMarginEnd" type="Text"
+                                        value="{leaveBookingMdl>emp_code}"
+                                        placeholder="{i18n>lod_pleaseselectemployee}"
+                                        showValueHelp="true" valueHelpOnly="true"
+                                        valueHelpRequest="valueHelpDialogEmployee"
+                                        valueState="{leaveBookingMdl>emp_code_state}"
+                                        valueStateText="{leaveBookingMdl>emp_code_stateText}" />
+
+                                    <Label text="{i18n>lod_addBookingType}"
+                                        class="sapUiTinyMarginBeginEnd sapUiTinyMarginTop"
+                                        required="true" />
+                                    <ComboBox id="addBookingType"
+                                        enabled="{= ${leaveBookingMdl>employee_id} !== null &amp;&amp; ${leaveBookingMdl>employee_id} !== undefined ? true : false}"
+                                        class="sapUiTinyMarginBegin"
+                                        items="{masterDataMdl>/leave_booking_type}"
+                                        placeholder="{i18n>lod_addBookingPlace}"
+                                        selectedKey="{leaveBookingMdl>type}"
+                                        change="onChangeBookingType"
+                                        valueState="{leaveBookingMdl>type_state}"
+                                        valueStateText="{leaveBookingMdl>leave_definitions_id_stateText}">
+                                        <core:ListItem key="{masterDataMdl>value}"
+                                            text="{masterDataMdl>description}" />
+                                    </ComboBox>
+                                </HBox>
+                                <ToolbarSpacer />
+                                <Button text="{i18n>lod_Delete}" type="Ghost"
+                                    press="onPressRemoveRowHeader" tooltip="Remove Item"
+                                    class="sapUiTinyMarginBegin" />
+
+                            </OverflowToolbar>
+                        </headerToolbar>
+                        <content>
+                            <!-- Leave Type -->
+                            <ScrollContainer id="ef" horizontal="true" vertical="false" width="100%">
+
+                                <Table id="leaveTable"
+                                    width="160rem"
+                                    visible="{= ${leaveBookingMdl>type} === '2' ? true : false }"
+                                    items="{path: 'leaveBookingMdl>leaveDetails'}" mode="None"
+                                    sticky="ColumnHeaders,HeaderToolbar" inset="false">
+
+                                    <columns visible="false">
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>lod_addleavetype}" required="true" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>lod_addFromDate}" required="true" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>lod_addFromDateType}" required="true" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>lod_addToDate}" required="true" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>lod_addTodateType}" required="true" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>lod_addReturnDate}"
+                                                required="{= ${configureSyncMdl>/0/sync_status} === 1 }" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>lod_addPayRunType}" required="true" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>organization_attachment}"
+                                                required="true" />
+                                        </Column>
+                                        <Column hAlign="Center">
+                                            <Label text="{i18n>lod_availableQuota}" />
+                                        </Column>
+                                        <Column hAlign="End">
+                                            <Label text="{i18n>lod_error}" />
+                                        </Column>
+                                        <Column hAlign="End">
+                                            <Button type="Ghost" icon="sap-icon://add"
+                                                enabled="{=${leaveBookingMdl>employee_id} !== null ? true : false}"
+                                                press="onPressAddRowItem" tooltip="Add Row" />
+                                        </Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem>
+                                            <cells>
+                                                <ComboBox
+                                                width="16rem"
+                                                    items="{leaveBookingMdl>leaveDefinitionsList}"
+                                                    placeholder="{i18n>lod_addLeavePlace}"
+                                                    selectedKey="{leaveBookingMdl>leave_definitions_id}"
+                                                    change="onChangeLeaveType"
+                                                    valueState="{leaveBookingMdl>leave_definitions_id_state}"
+                                                    valueStateText="{leaveBookingMdl>leave_definitions_id_stateText}">
+                                                    <core:ListItem key="{leaveBookingMdl>id}"
+                                                        text="{leaveBookingMdl>name}" />
+                                                </ComboBox>
+
+                                                <DatePicker width="12rem" value="{leaveBookingMdl>from_date}"
+                                                    valueFormat="yyyy-MM-dd"
+                                                    displayFormat="{settings>/userSettings/dateFormat}"
+                                                    change="onChangeDate"
+                                                    valueState="{leaveBookingMdl>from_date_state}"
+                                                    valueStateText="{leaveBookingMdl>from_date_stateText}" />
+
+                                                <ComboBox width="12rem" visible="true"
+                                                    items="{masterDataMdl>/leave_day_type}"
+                                                    placeholder="{i18n>lod_addFromPlace}"
+                                                    selectedKey="{leaveBookingMdl>from_date_type}"
+                                                    change="selectedRowValidation"
+                                                    valueState="{leaveBookingMdl>from_date_type_state}"
+                                                    valueStateText="{leaveBookingMdl>from_date_type_stateText}">
+                                                    <core:Item key="{masterDataMdl>value}"
+                                                        text="{masterDataMdl>description}" />
+                                                </ComboBox>
+
+                                                <DatePicker width="12rem" value="{leaveBookingMdl>to_date}"
+                                                    valueFormat="yyyy-MM-dd"
+                                                    displayFormat="{settings>/userSettings/dateFormat}"
+                                                    change="onChangeDate"
+                                                    valueState="{leaveBookingMdl>to_date_state}"
+                                                    valueStateText="{leaveBookingMdl>to_date_stateText}" />
+
+                                                <ComboBox width="12rem" visible="true"
+                                                    items="{masterDataMdl>/leave_day_type}"
+                                                    placeholder="{i18n>lod_addToPlace}"
+                                                    selectedKey="{leaveBookingMdl>to_date_type}"
+                                                    change="selectedRowValidation"
+                                                    valueState="{leaveBookingMdl>to_date_type_state}"
+                                                    valueStateText="{leaveBookingMdl>to_date_type_stateText}">
+                                                    <core:Item key="{masterDataMdl>value}"
+                                                        text="{masterDataMdl>description}" />
+                                                </ComboBox>
+
+                                                <DatePicker
+                                                width="12rem"
+                                                    enabled="{leaveBookingMdl>enable_return_date}"
+                                                    value="{leaveBookingMdl>return_date}"
+                                                    valueFormat="yyyy-MM-dd" change="onChangeDate"
+                                                    displayFormat="{settings>/userSettings/dateFormat}"
+                                                    valueState="{leaveBookingMdl>return_date_state}"
+                                                    valueStateText="{leaveBookingMdl>return_date_stateText}" />
+
+                                                <ComboBox
+                                                width="12rem"
+                                                    enabled="{leaveBookingMdl>enable_payr_run}"
+                                                    items="{masterDataMdl>/payoll_run_type}"
+                                                    placeholder="{i18n>lod_addPayRunTypePlace}"
+                                                    selectedKey="{leaveBookingMdl>payroll_run}"
+                                                    change="selectedRowValidation"
+                                                    valueState="{leaveBookingMdl>payroll_run_state}"
+                                                    valueStateText="{leaveBookingMdl>payroll_run_stateText}">
+                                                    <core:Item key="{masterDataMdl>value}"
+                                                        text="{masterDataMdl>description}" />
+                                                </ComboBox>
+                                                <VBox>
+                                                    <u:FileUploader change="onChangeAttachment"
+                                                        fileType="jpg,jpeg,png,pdf"
+                                                        maximumFileSize="3" iconOnly="true"
+                                                        icon="sap-icon://upload"
+                                                        tooltip="{i18n>organization_ttpUplodeYourFile}"
+                                                        valueState="{leaveBookingMdl>file_path_state}"
+                                                        valueStateText="{leaveBookingMdl>file_path_stateText}" />
+                                                    <!-- <Link text="{manageDocumentsMdl>file_name}"
+                                                    press="handleUploadPress"/> -->
+                                                    <Link text="{manageDocumentsMdl>file_name}"
+                                                        target="_blank"
+                                                        href="{manageDocumentsMdl>file_path}/{manageDocumentsMdl>file_name}"
+                                                        enabled="{= ${manageDocumentsMdl>file_name} !==  null &amp;&amp; ${manageDocumentsMdl>file_name} !== undefined &amp;&amp; ${manageDocumentsMdl>id} !== null ? true : false}" />
+                                                    <Text
+                                                        text="{i18n>organization_plhoMaximumFileSize}" />
+                                                </VBox>
+                                                <Text width="12rem" text="{leaveBookingMdl>available_quota}" />
+                                                <Button class="sapUiTinyMarginTop"
+                                                    enabled="{=${leaveBookingMdl>error_code} === 2 }"
+                                                    icon="{=${leaveBookingMdl>error_code} === 1 ? 'sap-icon://decline' : 'sap-icon://error'}"
+                                                    type="{=${leaveBookingMdl>error_code} === 1 ? 'Neutral' : ${leaveBookingMdl>error_code} === 2 ? 'Negative' : 'Success'}"
+                                                    press=".handleErrorMessagePopover"
+                                                    ariaHasPopup="Dialog"
+                                                    tooltip="{=${leaveBookingMdl>error_code} === 1 ? 'Not Validated' : ${leaveBookingMdl>error_code} === 2 ? 'Error' : 'Validated'}" />
+                                                <!-- <HBox class="leave_booking_css">
+                                                <ObjectStatus text="Error" state="Error" class="sapUiTinyMarginTop"/> -->
+                                                <Button type="Ghost" press="onPressRemoveRowItem"
+                                                    icon="sap-icon://decline" tooltip="Remove Row"
+                                                    class="sapUiSmallMarginBegin" />
+                                                <!-- </HBox> -->
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+
+                            </ScrollContainer>
+
+
+                            <!-- Attendance / On Duty -->
+                            <Table id="attendanceOnDutyTable"
+                                visible="{= ${leaveBookingMdl>type} === '1' ? true : false }"
+                                items="{path: 'leaveBookingMdl>attendanceDetails'}" mode="None"
+                                sticky="ColumnHeaders,HeaderToolbar" inset="false">
+
+                                <columns visible="false">
+                                    <Column hAlign="Center">
+                                        <Label text="{i18n>lod_addAttendancetype}" required="true" />
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Label text="{i18n>lod_addFromDate}" required="true" />
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Label text="{i18n>lod_addFromDateType}" required="true" />
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Label text="{i18n>lod_addToDate}" required="true" />
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Label text="{i18n>lod_addTodateType}" required="true" />
+                                    </Column>
+                                    <Column hAlign="Center">
+                                        <Label text="{i18n>lod_addRemarks}" required="true" />
+                                    </Column>
+                                    <Column hAlign="End">
+                                        <Label text="{i18n>lod_error}" />
+                                    </Column>
+                                    <Column hAlign="End">
+                                        <Button type="Ghost" icon="sap-icon://add"
+                                            enabled="{=${leaveBookingMdl>employee_id} !== null ? true : false}"
+                                            press="onPressAddRowItem" tooltip="Add Row" />
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <ComboBox items="{leaveBookingMdl>leaveDefinitionsList}"
+                                                placeholder="{i18n>lod_addAttendancePlace}"
+                                                selectedKey="{leaveBookingMdl>leave_definitions_id}"
+                                                change="onChangeLeaveType"
+                                                valueState="{leaveBookingMdl>leave_definitions_id_state}"
+                                                valueStateText="{leaveBookingMdl>leave_definitions_id_stateText}">
+                                                <core:ListItem key="{leaveBookingMdl>id}"
+                                                    text="{leaveBookingMdl>name}" />
+                                            </ComboBox>
+
+                                            <DatePicker value="{leaveBookingMdl>from_date}"
+                                                valueFormat="yyyy-MM-dd"
+                                                displayFormat="{settings>/userSettings/dateFormat}"
+                                                change="onChangeDate"
+                                                valueState="{leaveBookingMdl>from_date_state}"
+                                                valueStateText="{leaveBookingMdl>from_date_stateText}" />
+
+                                            <ComboBox visible="true"
+                                                items="{masterDataMdl>/leave_day_type}"
+                                                placeholder="{i18n>lod_addFromPlace}"
+                                                selectedKey="{leaveBookingMdl>from_date_type}"
+                                                change="selectedRowValidation"
+                                                valueState="{leaveBookingMdl>from_date_type_state}"
+                                                valueStateText="{leaveBookingMdl>from_date_type_stateText}">
+                                                <core:Item key="{masterDataMdl>value}"
+                                                    text="{masterDataMdl>description}" />
+                                            </ComboBox>
+
+                                            <DatePicker value="{leaveBookingMdl>to_date}"
+                                                valueFormat="yyyy-MM-dd"
+                                                displayFormat="{settings>/userSettings/dateFormat}"
+                                                change="onChangeDate"
+                                                valueState="{leaveBookingMdl>to_date_state}"
+                                                valueStateText="{leaveBookingMdl>to_date_stateText}" />
+
+                                            <ComboBox visible="true"
+                                                items="{masterDataMdl>/leave_day_type}"
+                                                placeholder="{i18n>lod_addToPlace}"
+                                                selectedKey="{leaveBookingMdl>to_date_type}"
+                                                change="selectedRowValidation"
+                                                valueState="{leaveBookingMdl>to_date_type_state}"
+                                                valueStateText="{leaveBookingMdl>to_date_type_stateText}">
+                                                <core:Item key="{masterDataMdl>value}"
+                                                    text="{masterDataMdl>description}" />
+                                            </ComboBox>
+
+                                            <TextArea value="{leaveBookingMdl>remarks}" rows="2"
+                                                change="selectedRowValidation"
+                                                valueState="{leaveBookingMdl>remarks_state}"
+                                                valueStateText="{leaveBookingMdl>remarks_stateText}" />
+
+                                            <Button class="sapUiTinyMarginTop"
+                                                enabled="{=${leaveBookingMdl>error_code} === 2 }"
+                                                icon="{=${leaveBookingMdl>error_code} === 1 ? 'sap-icon://decline' : 'sap-icon://error'}"
+                                                type="{=${leaveBookingMdl>error_code} === 1 ? 'Neutral' : ${leaveBookingMdl>error_code} === 2 ? 'Negative' : 'Success'}"
+                                                press=".handleErrorMessagePopover"
+                                                ariaHasPopup="Dialog"
+                                                tooltip="{=${leaveBookingMdl>error_code} === 1 ? 'Not Validated' : ${leaveBookingMdl>error_code} === 2 ? 'Error' : 'Validated'}" />
+                                            <!-- <HBox class="leave_booking_css">
+                                                <ObjectStatus text="Error" state="Error" class="sapUiTinyMarginTop"/> -->
+                                            <Button type="Ghost" press="onPressRemoveRowItem"
+                                                icon="sap-icon://decline" tooltip="Remove Row"
+                                                class="sapUiSmallMarginBegin" />
+                                            <!-- </HBox> -->
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>
+
+                            <!-- <MessageStrip text="Hi" type="Error" showIcon="true"
+                            showCloseButton="true"></MessageStrip> -->
+                        </content>
+                    </Panel>
+                </VBox>
+                <!-- <MessageStrip visible="false" id="errMsgStrip" showIcon="true"
+                showCloseButton="true" class="sapUiMediumMarginBottom"></MessageStrip> -->
+            </VBox>
+        </f:content>
+        <f:footer>
+
+            <Bar>
+                <contentLeft>
+                    <Button id="btn_EmployeeLeaveAddEditError" class="sapUiTinyMarginTop"
+                        visible="{=!!${errors>/}.length}" icon="sap-icon://error" type="Negative"
+                        text="{i18n>lod_error}" press=".handleMessagePopoverPress"
+                        ariaHasPopup="Dialog" />
+                </contentLeft>
+            </Bar>
+
+        </f:footer>
+    </f:DynamicPage>
+</mvc:View> 

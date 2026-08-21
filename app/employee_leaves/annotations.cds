@@ -166,40 +166,125 @@ annotate service.EmployeeLeaves with @(
         ],
     },
     UI.Facets : [
-        {
-            $Type : 'UI.ReferenceFacet',
-            ID : 'GeneratedFacet1',
-            Label : 'General Information',
-            Target : '@UI.FieldGroup#GeneratedGroup',
-        },
+        
     ],
     UI.LineItem : [
         {
             $Type : 'UI.DataField',
-            Label : 'company_id',
-            Value : company_id,
+            Value : employee.fullname_empcode,
+            Label : 'Employee Name',
         },
         {
             $Type : 'UI.DataField',
-            Label : 'type',
             Value : type,
+            Label : 'Leave Type',
         },
         {
             $Type : 'UI.DataField',
-            Label : 'request_status',
-            Value : request_status,
-        },
-        {
-            $Type : 'UI.DataField',
-            Label : 'leave_definitions_id',
-            Value : leave_definitions_id,
-        },
-        {
-            $Type : 'UI.DataField',
-            Label : 'from_date',
             Value : from_date,
         },
+        {
+            $Type : 'UI.DataField',
+            Value : to_date,
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : to_date_type,
+            Label : 'To Day Type',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : return_date,
+            Label : 'Return Date',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : return_from_actual,
+            Label : 'Return From Actual',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : final_no_of_leave_days,
+            Label : 'Final No of leave Days',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : from_date_type,
+            Label : 'From Day Type',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : request_status,
+        },
     ],
+    UI.SelectionFields : [
+        from_date,
+        to_date,
+        request_status,
+        company_id,
+    ],
+    UI.SelectionPresentationVariant #tableView : {
+        $Type : 'UI.SelectionPresentationVariantType',
+        PresentationVariant : {
+            $Type : 'UI.PresentationVariantType',
+            Visualizations : [
+                '@UI.LineItem',
+            ],
+        },
+        SelectionVariant : {
+            $Type : 'UI.SelectionVariantType',
+            SelectOptions : [
+            ],
+        },
+        Text : 'Booking History',
+    },
+    UI.LineItem #tableView : [
+        {
+            $Type : 'UI.DataField',
+            Value : sandwich_post_week_off,
+            Label : 'sandwich_post_week_off',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : sandwich_holiday_days,
+            Label : 'sandwich_holiday_days',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : return_from_actual,
+            Label : 'return_from_actual',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : sandwich_post_holiday,
+            Label : 'sandwich_post_holiday',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : sandwich_prior_holiday,
+            Label : 'sandwich_prior_holiday',
+        },
+        {
+            $Type : 'UI.DataField',
+            Value : sandwich_prior_week_off,
+            Label : 'sandwich_prior_week_off',
+        },
+    ],
+    UI.SelectionPresentationVariant #tableView1 : {
+        $Type : 'UI.SelectionPresentationVariantType',
+        PresentationVariant : {
+            $Type : 'UI.PresentationVariantType',
+            Visualizations : [
+                '@UI.LineItem#tableView',
+            ],
+        },
+        SelectionVariant : {
+            $Type : 'UI.SelectionVariantType',
+            SelectOptions : [
+            ],
+        },
+        Text : 'Booking History 2',
+    },
 );
 
 annotate service.EmployeeLeaves with {
@@ -230,5 +315,21 @@ annotate service.EmployeeLeaves with {
             },
         ],
     }
+};
+
+annotate service.EmployeeLeaves with {
+    from_date @Common.Label : 'From Date'
+};
+
+annotate service.EmployeeLeaves with {
+    to_date @Common.Label : 'To Date'
+};
+
+annotate service.EmployeeLeaves with {
+    request_status @Common.Label : 'Request Status'
+};
+
+annotate service.EmployeeLeaves with {
+    company_id @Common.Label : 'Company'
 };
 

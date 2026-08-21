@@ -128,9 +128,57 @@
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "GridTable"
+                  },
+                  "actions": {
+                    "Booking": {
+                      "press": "employeeleaves.ext.controller.LeaveBookActions.onBookLeave",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Book Leave / On Duty"
+                    }
+                  },
+                  "columns": {
+                    "DataField::employee::fullname_empcode": {
+                      "widthIncludingColumnHeader": true,
+                      "width": "150px"
+                    },
+                    "DataField::type": {
+                      "width": "150px",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::from_date": {
+                      "width": "150px",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::to_date": {
+                      "width": "150px",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::to_date_type": {
+                      "width": "150px",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::return_date": {
+                      "width": "150px",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::request_status": {
+                      "width": "150px",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::final_no_of_leave_days": {
+                      "width": "150px",
+                      "widthIncludingColumnHeader": true
+                    },
+                    "DataField::from_date_type": {
+                      "width": "150px",
+                      "widthIncludingColumnHeader": true
+                    }
                   }
                 }
-              }
+              },
+              "defaultTemplateAnnotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#tableView"
             }
           }
         },
@@ -141,7 +189,17 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/EmployeeLeaves"
+              "contextPath": "/EmployeeLeaves",
+              "content": {
+                "body": {
+                  "sections": {
+                    "LeaveOnDutyBooking": {
+                      "template": "employeeleaves.ext.fragment.LeaveOnDutyBooking",
+                      "title": "Leave On Duty Booking"
+                    }
+                  }
+                }
+              }
             }
           }
         }
