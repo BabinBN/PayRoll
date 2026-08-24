@@ -1,43 +1,29 @@
 sap.ui.define([
-    "sap/ui/core/mvc/XMLView",
-    "sap/m/Dialog",
     "sap/m/MessageToast"
-], function (XMLView, Dialog, MessageToast) {
+], function (MessageToast) {
     "use strict";
 
     return {
+        onBookLeave: function (oBindingContext, aSelectedContexts) {
+            console.log("Book Leave button clicked successfully!");
 
-        onBookLeave: function (oContext, aSelectedContexts) {
+            var oRouter = null;
 
-            XMLView.create({
-                id: "LeaveBookingView",
-                viewName: "employeeleaves.ext.view.LeaveBooking"
-            }).then(function (oView) {
+            if (this.routing && typeof this.routing.navigateToRoute === "function") {
+                oRouter = this.routing;
+            } else if (this.base && this.base.getExtensionAPI) {
+                oRouter = this.base.getExtensionAPI().routing;
+            } else if (this.getExtensionAPI) {
+                oRouter = this.getExtensionAPI().routing;
+            }
 
-                var oDialog = new Dialog({
-                    contentWidth: "90%",
-                    contentHeight: "80%",
-                    resizable: true,
-                    draggable: true,
-                    content: [oView],
-                    afterClose: function () {
-                        oDialog.destroy();
-                    }
-                });
-
-                if (oView.getController() && oView.getController().setDialog) {
-                    oView.getController().setDialog(oDialog);
-                }
-
-                oDialog.open();
-
-            }).catch(function (oError) {
-
-                console.error("Failed to load LeaveBooking view:", oError);
-                MessageToast.show("Failed to open Leave Booking");
-
-            });
+            if (oRouter) {
+                console.log("Routing engine located. Navigating...");
+                oRouter.navigateToRoute("LeaveBooking", {});
+            } else {
+                console.error("Critical: Could not resolve Fiori Elements routing structure.", this);
+                MessageToast.show("Navigation failed: Routing engine not found.");
+            }
         }
-
     };
 });

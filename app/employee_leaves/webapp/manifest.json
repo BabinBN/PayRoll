@@ -66,6 +66,7 @@
         "sap.fe.templates": {}
       }
     },
+  
     "contentDensities": {
       "compact": true,
       "cozy": true
@@ -95,7 +96,12 @@
       "css": []
     },
     "routing": {
-      "config": {},
+      "config": {
+        "routerClass": "sap.f.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "async": true
+      },
       "routes": [
         {
           "pattern": ":?query:",
@@ -106,6 +112,11 @@
           "pattern": "EmployeeLeaves({key}):?query:",
           "name": "EmployeeLeavesObjectPage",
           "target": "EmployeeLeavesObjectPage"
+        },
+        {
+          "pattern": "LeaveBooking",
+          "name": "LeaveBooking",
+          "target": "LeaveBookingPage"
         }
       ],
       "targets": {
@@ -202,6 +213,12 @@
               }
             }
           }
+        },
+        "LeaveBookingPage": {
+          "type": "View",
+          "id": "LeaveBookingPage",
+          "name": "employeeleaves.ext.view.LeaveBooking",
+          "viewType": "XML"
         }
       }
     }
