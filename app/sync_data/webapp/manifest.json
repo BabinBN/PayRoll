@@ -1,0 +1,135 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "syncdata",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.31.1",
+      "toolsId": "f76ca64d-6561-427d-90bc-1c21bed70768"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/service/sync/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Sync_Data-manageSyncData": {
+          "semanticObject": "Sync_Data",
+          "action": "manageSyncData",
+          "title": "{{Sync_Data-manageSyncData.flpTitle}}",
+          "subTitle": "{{Sync_Data-manageSyncData.flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.151.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "syncdata.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "syncdata.view",
+        "async": true,
+        "viewPath": "syncdata.view"
+      },
+      "routes": [
+        {
+          "name": "RouteSync_Data",
+          "pattern": ":?query:",
+          "target": [
+            "TargetSync_Data"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetSync_Data": {
+          "id": "Sync_Data",
+          "name": "Sync_Data"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "syncdata.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "payroll_BN"
+  }
+}

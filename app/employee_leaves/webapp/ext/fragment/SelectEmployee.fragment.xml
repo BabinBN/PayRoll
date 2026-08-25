@@ -58,47 +58,72 @@
                 </fb:filterItems>
             </fb:FilterBar>
 
-            <Table id="table_SelectEmp" items="{employeeListMdl>/}" mode="MultiSelect" sticky="ColumnHeaders,HeaderToolbar" inset="false" class="sapUiSmallMarginTop" growing="true" growingThreshold="10000">
-                <headerToolbar>
-                    <OverflowToolbar>
-                        <content>
-                            <Label design="Bold" text="Items ({= ${employeeListMdl>/}.length})" />
-                        </content>
-                    </OverflowToolbar>
-                </headerToolbar>
-                <columns>
-                    <Column>
-                        <Text text="Employee Code" />
-                    </Column>
-                    <Column>
-                        <Text text="Employee Name" />
-                    </Column>
-                    <Column>
-                        <Text text="E-mail" />
-                    </Column>
-                    <Column>
-                        <Text width="5rem" text="DOB" />
-                    </Column>
-                    <Column>
-                        <Text width="5rem" text="Gender" />
-                    </Column>
-                    <Column>
-                        <Text width="5rem" text="Status" />
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem>
-                        <cells>
-                            <Text text="{employeeListMdl>empCode}" />
-                            <Text text="{employeeListMdl>employee_name}" />
-                            <Text text="{employeeListMdl>email}" />
-                            <Text text="{employeeListMdl>dob}" />
-                            <Text text="{employeeListMdl>gender_name}" />
-                            <ObjectStatus text="{path : 'employeeListMdl>statusText'}" state="{= ${employeeListMdl>status} === 0 ? 'Success' : 'Error'}" />
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
+            <Table
+    id="table_SelectEmp"
+    items="{employeeListMdl>/}"
+    mode="MultiSelect"
+    sticky="ColumnHeaders,HeaderToolbar"
+    inset="false"
+    class="sapUiSmallMarginTop"
+    growing="true"
+    growingThreshold="10000">
+
+    <headerToolbar>
+        <OverflowToolbar>
+            <content>
+                <Label
+                    design="Bold"
+                    text="Items ({= ${employeeListMdl>/}.length})" />
+            </content>
+        </OverflowToolbar>
+    </headerToolbar>
+
+    <columns>
+        <Column>
+            <Text text="Employee Code" />
+        </Column>
+
+        <Column>
+            <Text text="Employee Name" />
+        </Column>
+
+        <Column>
+            <Text text="E-mail" />
+        </Column>
+
+        <Column>
+            <Text text="DOB" />
+        </Column>
+
+        <Column>
+            <Text text="Gender" />
+        </Column>
+
+        <Column>
+            <Text text="Status" />
+        </Column>
+    </columns>
+
+    <items>
+        <ColumnListItem>
+            <cells>
+                <Text text="{employeeListMdl>emp_code}" />
+
+                <Text text="{employeeListMdl>fullname_empcode}" />
+
+                <Text text="{employeeListMdl>email}" />
+
+                <Text text="{employeeListMdl>dob}" />
+
+                <Text text="{employeeListMdl>gender}" />
+
+                <ObjectStatus
+                    text="{employeeListMdl>status/Name_status}" />
+            </cells>
+        </ColumnListItem>
+    </items>
+
+</Table>
         </content>
 
         <footer>

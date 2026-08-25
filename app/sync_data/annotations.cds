@@ -1,0 +1,1 @@
+using syncservice as service from '../../srv/sync_data-service';

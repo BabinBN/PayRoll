@@ -84,6 +84,14 @@ modules:
       - employeeleaves.zip
       name: employeeleaves
       target-path: resources/
+    - artifacts:
+      - holidaycalender.zip
+      name: holidaycalender
+      target-path: resources/
+    - artifacts:
+      - syncdata.zip
+      name: syncdata
+      target-path: resources/
 - name: employee
   type: html5
   path: app/employee
@@ -97,6 +105,26 @@ modules:
 - name: employeeleaves
   type: html5
   path: app/employee_leaves
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: holidaycalender
+  type: html5
+  path: app/holidaycalender
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: syncdata
+  type: html5
+  path: app/sync_data
   build-parameters:
     build-result: dist
     builder: custom

@@ -11,7 +11,8 @@
   "sapux": [
     "app/employee",
     "app/employee",
-    "app/employee_leaves"
+    "app/employee_leaves",
+    "app/holidaycalender"
   ],
   "scripts": {
     "undeploy": "cf undeploy PayRoll --delete-services --delete-service-keys --delete-service-brokers",
