@@ -92,6 +92,10 @@ modules:
       - syncdata.zip
       name: syncdata
       target-path: resources/
+    - artifacts:
+      - department.zip
+      name: department
+      target-path: resources/
 - name: employee
   type: html5
   path: app/employee
@@ -125,6 +129,16 @@ modules:
 - name: syncdata
   type: html5
   path: app/sync_data
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: department
+  type: html5
+  path: app/department
   build-parameters:
     build-result: dist
     builder: custom

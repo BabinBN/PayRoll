@@ -1,0 +1,1 @@
+using DepartmentService as service from '../../srv/department-service';

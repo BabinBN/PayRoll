@@ -1,0 +1,146 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "department",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.31.1",
+      "toolsId": "8f3d0d90-bbc2-49ae-a06d-1aa0bee939d7"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/service/Department/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Departments-manageDepartment": {
+          "semanticObject": "Departments",
+          "action": "manageDepartment",
+          "title": "{{Departments-manageDepartment.flpTitle}}",
+          "subTitle": "{{Departments-manageDepartment.flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.151.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "department.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "department.view",
+        "async": true,
+        "viewPath": "department.view"
+      },
+      "routes": [
+        {
+          "name": "Routedepartment",
+          "pattern": ":?query:",
+          "target": [
+            "Targetdepartment"
+          ]
+        },
+        {
+          "name": "departments-post",
+          "pattern": "departments-post",
+          "target": [
+            "TargetAddEditDepartments"
+          ]
+        }
+      ],
+      "targets": {
+        "Targetdepartment": {
+          "id": "ManageDepartments",
+          "name": "ManageDepartments"
+        },
+        "TargetAddEditDepartments": {
+          "id": "AddEditDepartments",
+          "name": "AddEditDepartments"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "department.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "payroll_BN"
+  }
+}

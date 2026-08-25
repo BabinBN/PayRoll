@@ -66,7 +66,6 @@
         "sap.fe.templates": {}
       }
     },
-  
     "contentDensities": {
       "compact": true,
       "cozy": true
@@ -97,7 +96,6 @@
     },
     "routing": {
       "config": {
-        "routerClass": "sap.f.routing.Router",
         "type": "View",
         "viewType": "XML",
         "async": true
@@ -107,11 +105,6 @@
           "pattern": ":?query:",
           "name": "EmployeeLeavesList",
           "target": "EmployeeLeavesList"
-        },
-        {
-          "pattern": "EmployeeLeaves({key}):?query:",
-          "name": "EmployeeLeavesObjectPage",
-          "target": "EmployeeLeavesObjectPage"
         },
         {
           "pattern": "LeaveBooking",
@@ -127,18 +120,12 @@
           "options": {
             "settings": {
               "contextPath": "/EmployeeLeaves",
-              "variantManagement": "Page",
-              "navigation": {
-                "EmployeeLeaves": {
-                  "detail": {
-                    "route": "EmployeeLeavesObjectPage"
-                  }
-                }
-              },
+              "variantManagement": "None",
+              "navigation": {},
               "controlConfiguration": {
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
-                    "type": "GridTable"
+                    "type": "ResponsiveTable"
                   },
                   "actions": {
                     "Booking": {
@@ -190,27 +177,6 @@
                 }
               },
               "defaultTemplateAnnotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#tableView"
-            }
-          }
-        },
-        "EmployeeLeavesObjectPage": {
-          "type": "Component",
-          "id": "EmployeeLeavesObjectPage",
-          "name": "sap.fe.templates.ObjectPage",
-          "options": {
-            "settings": {
-              "editableHeaderContent": false,
-              "contextPath": "/EmployeeLeaves",
-              "content": {
-                "body": {
-                  "sections": {
-                    "LeaveOnDutyBooking": {
-                      "template": "employeeleaves.ext.fragment.LeaveOnDutyBooking",
-                      "title": "Leave On Duty Booking"
-                    }
-                  }
-                }
-              }
             }
           }
         },
