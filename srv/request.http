@@ -131,4 +131,4 @@ GET http://localhost:8080/odata/v4/service/Empdt/Status
 
 
 ###EmploymentTypes
-GET http://localhost:8080/odata/v4/service/Empdt/EmploymentTypes
+GET http://localhost:8080/odata/v4/service/Department/$metadata

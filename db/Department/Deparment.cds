@@ -9,7 +9,7 @@ using {Employees as emp} from '../Employess/Employees';
 
 entity Department : cuid, managed {
     name        : String(30);
-    company_i   : Integer;
+    company_id   : Integer;
     location_id : Integer;
     branch_id   : Integer;
     status      : Association to one emp.Status;

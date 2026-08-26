@@ -119,7 +119,14 @@
           "target": [
             "TargetAddEditDepartments"
           ]
-        }
+        },
+         {
+        "name": "departments-update",
+        "pattern": "departments-update/{ID}/{IsActiveEntity}",
+        "target": [
+            "TargetAddEditDepartments"
+        ]
+    }
       ],
       "targets": {
         "Targetdepartment": {

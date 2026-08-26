@@ -31,10 +31,70 @@ sap.ui.define(
                     this.loadDropdownData();
 
                     this.registerpageIds();
+                    this.oRouter
+                        .getRoute("departments-post")
+                        .attachPatternMatched(
+                            this._onCreateRouteMatched,
+                            this
+                        );
+
+                    this.oRouter
+                        .getRoute("departments-update")
+                        .attachPatternMatched(
+                            this._onUpdateRouteMatched,
+                            this
+                        );
 
                 },
 
+                _onCreateRouteMatched: function () {
 
+                    console.log(
+                        "Create Department page"
+                    );
+
+                    this.initialMdl();
+                },
+                _onUpdateRouteMatched: async function (oEvent) {
+
+                    try {
+
+                        const oArguments =
+                            oEvent.getParameter("arguments");
+
+                        const sID =
+                            oArguments.ID;
+
+                        const bIsActiveEntity =
+                            oArguments.IsActiveEntity === "true";
+
+                        console.log(
+                            "Update Department ID:",
+                            sID
+                        );
+
+                        console.log(
+                            "IsActiveEntity:",
+                            bIsActiveEntity
+                        );
+
+                        await this.loadDepartment(
+                            sID,
+                            bIsActiveEntity
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            "Update route error:",
+                            error
+                        );
+
+                        MessageBox.error(
+                            "Failed to load Department"
+                        );
+                    }
+                },
                 // =====================================================
                 // INITIAL DEPARTMENT MODEL
                 // =====================================================
@@ -73,7 +133,76 @@ sap.ui.define(
                     );
 
                 },
+                loadDepartment: async function (
+                    sID,
+                    bIsActiveEntity
+                ) {
 
+                    const oModel =
+                        this.getOwnerComponent().getModel();
+
+                    const sPath =
+                        "/Department(ID=" +
+                        sID +
+                        ",IsActiveEntity=" +
+                        bIsActiveEntity +
+                        ")";
+
+                    console.log(
+                        "Department path:",
+                        sPath
+                    );
+
+                    const oContext =
+                        oModel.bindContext(sPath);
+
+                    const oDepartment =
+                        await oContext.requestObject();
+
+                    console.log(
+                        "Loaded Department:",
+                        oDepartment
+                    );
+
+                    const oDepartmentModel =
+                        this.getView()
+                            .getModel("departmentMdl");
+
+                    oDepartmentModel.setData({
+
+                        id: oDepartment.ID,
+
+                        name:
+                            oDepartment.name || "",
+
+                        company_id:
+                            oDepartment.company_id,
+
+                        location_id:
+                            oDepartment.location_id,
+
+                        branch_id:
+                            oDepartment.branch_id,
+
+                        status:
+                            oDepartment.status_ID,
+
+                        IsActiveEntity:
+                            oDepartment.IsActiveEntity,
+
+                        HasActiveEntity:
+                            oDepartment.HasActiveEntity,
+
+                        HasDraftEntity:
+                            oDepartment.HasDraftEntity
+
+                    });
+
+                    console.log(
+                        "departmentMdl:",
+                        oDepartmentModel.getData()
+                    );
+                },
 
                 // =====================================================
                 // MANUAL DROPDOWN DATA
@@ -385,10 +514,20 @@ sap.ui.define(
                         const oModel =
                             this.getOwnerComponent().getModel();
 
+                        const oDepartmentModel =
+                            this.getView().getModel("departmentMdl");
+
                         const data =
-                            this.getView()
-                                .getModel("departmentMdl")
-                                .getData();
+                            oDepartmentModel.getData();
+
+                        console.log(
+                            "Department data:",
+                            data
+                        );
+
+                        // ============================================
+                        // 1. Create draft
+                        // ============================================
 
                         const oListBinding =
                             oModel.bindList("/Department");
@@ -398,8 +537,7 @@ sap.ui.define(
 
                                 name: data.name,
 
-                                // CDS field is company_i
-                                company_i:
+                                company_id:
                                     Number(data.company_id),
 
                                 location_id:
@@ -413,13 +551,87 @@ sap.ui.define(
 
                             });
 
+                        console.log(
+                            "Draft context created:",
+                            oContext
+                        );
+
+                        // ============================================
+                        // 2. Wait for draft POST
+                        // ============================================
+
                         await oContext.created();
+
+                        const oDraft =
+                            oContext.getObject();
+
+                        console.log(
+                            "Draft created:",
+                            oDraft
+                        );
+
+                        console.log(
+                            "Draft ID:",
+                            oDraft.ID
+                        );
+
+                        console.log(
+                            "IsActiveEntity:",
+                            oDraft.IsActiveEntity
+                        );
+
+                        // ============================================
+                        // 3. Activate draft
+                        // ============================================
+
+                        const oActionBinding =
+                            oModel.bindContext(
+                                "DepartmentService.draftActivate(...)",
+                                oContext
+                            );
+
+                        console.log(
+                            "Activating draft..."
+                        );
+
+                        await oActionBinding.execute();
+
+                        // ============================================
+                        // 4. Get active object
+                        // ============================================
+
+                        const oActiveContext =
+                            oActionBinding.getBoundContext();
+
+                        const oActiveDepartment =
+                            oActiveContext.getObject();
+
+                        console.log(
+                            "Active Department:",
+                            oActiveDepartment
+                        );
+
+                        console.log(
+                            "Active Department ID:",
+                            oActiveDepartment.ID
+                        );
+
+                        console.log(
+                            "IsActiveEntity:",
+                            oActiveDepartment.IsActiveEntity
+                        );
+
+                        // ============================================
+                        // 5. Success
+                        // ============================================
 
                         MessageToast.show(
                             "Department saved successfully"
                         );
 
-                        this.oRouter.navTo("departments");
+                        this.oRouter.navTo(
+                            "Routedepartment"
+                        );
 
                     } catch (error) {
 
@@ -434,7 +646,6 @@ sap.ui.define(
                         );
                     }
                 },
-
                 // =====================================================
                 // CLOSE
                 // =====================================================
@@ -442,7 +653,7 @@ sap.ui.define(
                 handleClose: function () {
 
                     this.oRouter.navTo(
-                        "departments"
+                        "Routedepartment"
                     );
 
                 },
@@ -451,7 +662,7 @@ sap.ui.define(
                 onPressClose: function () {
 
                     this.oRouter.navTo(
-                        "departments"
+                        "Routedepartment"
                     );
 
                 },

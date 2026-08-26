@@ -9,10 +9,6 @@ sap.ui.define([
 
     return Controller.extend("department.controller.ManageDepartments", {
 
-        // =========================================================
-        // INIT
-        // =========================================================
-
         onInit: function () {
 
             this.oRouter = this.getOwnerComponent().getRouter();
@@ -23,22 +19,13 @@ sap.ui.define([
             this.branch = this.byId("cb_branch");
             this.location = this.byId("cb_location");
 
-            // Validation model
             this.eMdl = new JSONModel([]);
 
-            // Page ID if required by Validators
             this._pageId = "department";
+            this.setEmptyModel();
+            this.getDepartments();
 
-            // Initialize models
-            // this.setEmptyModel();
-
-            // // Load companies
-            // this.getCompanies();
         },
-
-        // =========================================================
-        // EMPTY MODELS
-        // =========================================================
 
         setEmptyModel: function () {
 
@@ -79,9 +66,6 @@ sap.ui.define([
             this.eMdl.setData([]);
         },
 
-        // =========================================================
-        // CLEAR FILTERS
-        // =========================================================
 
         clearAllFilters: function () {
 
@@ -112,503 +96,79 @@ sap.ui.define([
             this.eMdl.setData([]);
         },
 
-        // =========================================================
-        // GET COMPANIES
-        // =========================================================
-
-        getCompanies: async function () {
+        getDepartments: async function () {
 
             try {
 
-                this._company.setBusy(true);
 
-                var path =
-                    URLConstants.URL.companies_for_select;
-
-                var response =
-                    await this.restMethodGet(path);
-
-                console.log("Companies response:", response);
-
-                if (!Array.isArray(response)) {
-                    response = [];
-                }
-
-                // Only Active companies
-                var aCompanies = response.filter(function (oCompany) {
-                    return oCompany.status === 0;
-                });
-
-                this.getView()
-                    .getModel("companyMdl")
-                    .setData(aCompanies);
-
-                // If only one company exists
-                if (aCompanies.length === 1) {
-
-                    var oCompany = aCompanies[0];
-
-                    this.getView()
-                        .getModel("advancedFilterMdl")
-                        .setProperty(
-                            "/company_id",
-                            oCompany.id
-                        );
-
-                    this.getView()
-                        .getModel("advancedFilterMdl")
-                        .setProperty(
-                            "/system_id",
-                            oCompany.system_id
-                        );
-
-                    this._company.setSelectedKey(
-                        oCompany.id
-                    );
-
-                    // Load dependent data
-                    await this.getBranches(oCompany.id);
-                    await this.fetchLocation(oCompany.id);
-
-                    // Load departments
-                    await this.advancedFilter();
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "getCompanies error:",
-                    error
-                );
-
-                this.errorHandling(error);
-
-            } finally {
-
-                this._company.setBusy(false);
-            }
-        },
-
-        // =========================================================
-        // COMPANY CHANGE
-        // =========================================================
-
-        onChangeCompany: async function (oEvent) {
-
-            try {
-
-                var oComboBox = oEvent.getSource();
-
-                var companyId =
-                    oComboBox.getSelectedKey();
+                var oODataModel =
+                    this.getOwnerComponent().getModel();
 
                 console.log(
-                    "Selected Company ID:",
-                    companyId
+                    "OData Model:",
+                    oODataModel
                 );
 
-                var oFilterModel =
-                    this.getView()
-                        .getModel("advancedFilterMdl");
+                if (!oODataModel) {
 
-                // Set company
-                oFilterModel.setProperty(
-                    "/company_id",
-                    companyId
-                );
+                    console.error(
+                        "Default OData model not found"
+                    );
 
-                // Clear dependent selections
-                oFilterModel.setProperty(
-                    "/location_id",
-                    null
-                );
+                    return;
+                }
 
-                oFilterModel.setProperty(
-                    "/branch_id",
-                    null
-                );
+                // Bind Department entity
+                var oListBinding =
+                    oODataModel.bindList(
+                        "/Department",
+                        null,
+                        null,
+                        null,
+                        {
+                            $expand: "status"
+                        }
+                    );
 
-                // Find company
-                var aCompanies =
-                    this.getView()
-                        .getModel("companyMdl")
-                        .getData();
+                // Request records
+                var aContexts =
+                    await oListBinding.requestContexts();
 
-                var oSelectedCompany =
-                    aCompanies.find(function (oCompany) {
+                // Convert contexts to normal JS objects
+                var aDepartments =
+                    aContexts.map(function (oContext) {
 
-                        return String(oCompany.id) ===
-                            String(companyId);
+                        return oContext.getObject();
+
                     });
 
                 console.log(
-                    "Selected Company:",
-                    oSelectedCompany
+                    "Departments from CAP:",
+                    aDepartments
                 );
 
-                // Set system ID
-                oFilterModel.setProperty(
-                    "/system_id",
-                    oSelectedCompany
-                        ? oSelectedCompany.system_id
-                        : null
+                // Store in JSONModel
+                var oDepartmentModel =
+                    new JSONModel(aDepartments);
+
+                this.getView().setModel(
+                    oDepartmentModel,
+                    "gradesMdl"
                 );
 
-                // Load branches
-                await this.getBranches(companyId);
+                console.log(
+                    "gradesMdl created"
+                );
 
-                // Load locations
-                await this.fetchLocation(companyId);
-
-            } catch (error) {
+            } catch (oError) {
 
                 console.error(
-                    "onChangeCompany error:",
-                    error
+                    "Error fetching Departments:",
+                    oError
                 );
 
-                this.errorHandling(error);
             }
         },
-
-        // =========================================================
-        // GET BRANCHES
-        // =========================================================
-
-        getBranches: async function (companyId) {
-
-            try {
-
-                this.branch.setBusy(true);
-
-                if (!companyId) {
-
-                    this.getView()
-                        .getModel("branchesModel")
-                        .setData([]);
-
-                    return;
-                }
-
-                var path =
-                    URLConstants.URL.branches_by_company_id
-                        .replace(
-                            "{companyId}",
-                            companyId
-                        );
-
-                console.log(
-                    "Branches URL:",
-                    path
-                );
-
-                var response =
-                    await this.restMethodGet(path);
-
-                console.log(
-                    "Branches response:",
-                    response
-                );
-
-                if (!Array.isArray(response)) {
-                    response = [];
-                }
-
-                this.getView()
-                    .getModel("branchesModel")
-                    .setData(response);
-
-            } catch (error) {
-
-                console.error(
-                    "getBranches error:",
-                    error
-                );
-
-                this.errorHandling(error);
-
-            } finally {
-
-                this.branch.setBusy(false);
-            }
-        },
-
-        // =========================================================
-        // GET LOCATIONS
-        // =========================================================
-
-        fetchLocation: async function (companyId) {
-
-            try {
-
-                this.location.setBusy(true);
-
-                if (!companyId) {
-
-                    this.getView()
-                        .getModel("locationsMdl")
-                        .setData([]);
-
-                    return;
-                }
-
-                var oFilterModel =
-                    this.getView()
-                        .getModel("advancedFilterMdl");
-
-                var oData = {
-
-                    company_id: companyId,
-                    page_number: 1,
-                    page_size: 1000
-
-                };
-
-                console.log(
-                    "Location payload:",
-                    oData
-                );
-
-                var path =
-                    URLConstants.URL.get_location;
-
-                var response =
-                    await this.restMethodPost(
-                        path,
-                        oData
-                    );
-
-                console.log(
-                    "Location response:",
-                    response
-                );
-
-                if (!Array.isArray(response)) {
-                    response = [];
-                }
-
-                this.getView()
-                    .getModel("locationsMdl")
-                    .setData(response);
-
-            } catch (error) {
-
-                console.error(
-                    "fetchLocation error:",
-                    error
-                );
-
-                this.errorHandling(error);
-
-            } finally {
-
-                this.location.setBusy(false);
-            }
-        },
-
-        // =========================================================
-        // FILTER
-        // =========================================================
-
-        advancedFilter: async function () {
-
-            try {
-
-                this.tableId.setBusy(true);
-
-                /*
-                 * Validation
-                 *
-                 * Keep this only if your project already has
-                 * Validators.filterBarValidation().
-                 */
-
-                if (
-                    typeof Validators !== "undefined" &&
-                    Validators.filterBarValidation
-                ) {
-
-                    Validators.filterBarValidation(
-                        this.formId,
-                        this.eMdl,
-                        this._pageId
-                    );
-                }
-
-                var aValidationErrors =
-                    this.eMdl.getData();
-
-                if (
-                    aValidationErrors &&
-                    aValidationErrors.length > 0
-                ) {
-
-                    this.errorHandling();
-                    return;
-                }
-
-                var oFilterModel =
-                    this.getView()
-                        .getModel("advancedFilterMdl");
-
-                var oData =
-                    Object.assign(
-                        {},
-                        oFilterModel.getData()
-                    );
-
-                // Pagination
-                oData.page_number = 1;
-                oData.page_size = 1000;
-
-                // Map name to backend field
-                if (oData.name) {
-                    oData.department_name =
-                        oData.name;
-                }
-
-                console.log(
-                    "Payload sent to backend:",
-                    oData
-                );
-
-                var path =
-                    URLConstants.URL.departments_all;
-
-                var response =
-                    await this.restMethodPost(
-                        path,
-                        oData
-                    );
-
-                console.log(
-                    "Department response:",
-                    response
-                );
-
-                if (!Array.isArray(response)) {
-                    response = [];
-                }
-
-                // =================================================
-                // Company / Branch / Location names
-                // =================================================
-
-                var aCompanies =
-                    this.getView()
-                        .getModel("companyMdl")
-                        .getData();
-
-                var aBranches =
-                    this.getView()
-                        .getModel("branchesModel")
-                        .getData();
-
-                var aLocations =
-                    this.getView()
-                        .getModel("locationsMdl")
-                        .getData();
-
-                response.forEach(function (oDepartment) {
-
-                    var oCompany =
-                        aCompanies.find(function (oItem) {
-
-                            return String(oItem.id) ===
-                                String(
-                                    oDepartment.company_id
-                                );
-                        });
-
-                    var oBranch =
-                        aBranches.find(function (oItem) {
-
-                            return String(oItem.id) ===
-                                String(
-                                    oDepartment.branch_id
-                                );
-                        });
-
-                    var oLocation =
-                        aLocations.find(function (oItem) {
-
-                            return String(oItem.id) ===
-                                String(
-                                    oDepartment.location_id
-                                );
-                        });
-
-                    oDepartment.company_name =
-                        oCompany
-                            ? oCompany.name
-                            : "";
-
-                    oDepartment.branch_name =
-                        oBranch
-                            ? oBranch.name
-                            : "";
-
-                    oDepartment.location_name =
-                        oLocation
-                            ? oLocation.location
-                            : "";
-                });
-
-                // Set table data
-                this.getView()
-                    .getModel("gradesMdl")
-                    .setData(response);
-
-            } catch (error) {
-
-                console.error(
-                    "advancedFilter error:",
-                    error
-                );
-
-                this.errorHandling(error);
-
-            } finally {
-
-                this.tableId.setBusy(false);
-            }
-        },
-
-        // =========================================================
-        // EXPORT
-        // =========================================================
-
-        createColumnConfig: function () {
-
-            return [
-
-                {
-                    label: "Name",
-                    property: "name",
-                    width: 25
-                },
-
-                {
-                    label: "Company",
-                    property: "company_name",
-                    width: 25
-                },
-
-                {
-                    label: "Branch",
-                    property: "branch_name",
-                    width: 25
-                },
-
-                {
-                    label: "Status",
-                    property: "status",
-                    width: 25
-                }
-
-            ];
-        },
-
         handleExport: function () {
 
             var aData =
@@ -658,7 +218,7 @@ sap.ui.define([
 
         onListItemPress: function (oEvent) {
 
-            var oContext =
+            const oContext =
                 oEvent.getSource()
                     .getBindingContext("gradesMdl");
 
@@ -666,22 +226,26 @@ sap.ui.define([
                 return;
             }
 
-            var oDepartment =
+            const oDepartment =
                 oContext.getObject();
 
             console.log(
-                "Selected department:",
+                "Selected Department:",
                 oDepartment
             );
 
             this.oRouter.navTo(
                 "departments-update",
                 {
-                    layout: "MidColumnFullScreen",
-                    ID: oDepartment.id
+                    ID: oDepartment.ID,
+
+                    IsActiveEntity:
+                        String(
+                            oDepartment.IsActiveEntity
+                        )
                 }
             );
-        }
+        },
 
     });
 });

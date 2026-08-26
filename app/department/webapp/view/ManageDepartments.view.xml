@@ -280,31 +280,31 @@
                 <!-- Rows -->
                 <items>
 
-                    <ColumnListItem
-                        type="Navigation"
-                        press=".onListItemPress">
+                  <ColumnListItem
+    type="Navigation"
+    press=".onListItemPress">
 
-                        <cells>
+    <cells>
 
-                            <Text
-                                text="{gradesMdl>name}"
-                                wrapping="false"/>
+        <Text
+            text="{gradesMdl>name}"
+            wrapping="false"/>
 
-                            <Text
-                                text="{gradesMdl>company_name}"
-                                wrapping="false"/>
+        <Text
+            text="{gradesMdl>company_name}"
+            wrapping="false"/>
 
-                            <Text
-                                text="{gradesMdl>branch_name}"
-                                wrapping="false"/>
+        <Text
+            text="{gradesMdl>branch_name}"
+            wrapping="false"/>
 
-                            <ObjectStatus
-                                text="{= ${gradesMdl>status} === 0 ? 'Active' : 'Inactive'}"
-                                state="{= ${gradesMdl>status} === 0 ? 'Success' : 'Error'}"/>
+        <ObjectStatus
+            text="{= ${gradesMdl>recordType} === 'Draft' ? 'Draft' : 'Active'}"
+            state="{= ${gradesMdl>recordType} === 'Draft' ? 'Warning' : 'Success'}"/>
 
-                        </cells>
+    </cells>
 
-                    </ColumnListItem>
+</ColumnListItem>
 
                 </items>
 

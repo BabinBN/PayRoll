@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Payroll - Local Launchpad</title>
+
+    <script>
+        
+        window["sap-ushell-config"] = {
+
+            defaultRenderer: "fiori2",
+
+            services: {
+
+                NavTargetResolution: {
+                    config: {
+                        allowTestUrlComponentConfig: true,
+                        enableClientSideTargetResolution: true
+                    }
+                },
+
+                LaunchPage: {
+                    adapter: {
+                        config: {
+
+                            groups: [
+
+                                // =====================================
+                                // ADMINISTRATION
+                                // =====================================
+                                {
+                                    id: "Administration",
+                                    title: "Administration",
+                                    isPreset: true,
+                                    isVisible: true,
+
+                                    tiles: [
+                                        {
+                                            id: "syncdataTile",
+                                            tileType:
+                                                "sap.ushell.ui.tile.StaticTile",
+
+                                            properties: {
+                                                title: "Sync Data",
+                                                subtitle:
+                                                    "Synchronize Data",
+                                                icon:
+                                                    "sap-icon://synchronize",
+                                                targetURL:
+                                                    "#syncdata-display"
+                                            }
+                                        }
+                                    ]
+                                },
+
+                                // =====================================
+                                // ORGANIZATION
+                                // =====================================
+                                {
+                                    id: "Organization",
+                                    title: "Organization",
+                                    isPreset: true,
+                                    isVisible: true,
+
+                                    tiles: [
+
+                                        {
+                                            id: "employeeTile",
+                                            tileType:
+                                                "sap.ushell.ui.tile.StaticTile",
+
+                                            properties: {
+                                                title: "Employees",
+                                                subtitle:
+                                                    "Manage Employees",
+                                                icon:
+                                                    "sap-icon://employee",
+                                                targetURL:
+                                                    "#employee-display"
+                                            }
+                                        },
+
+                                        {
+                                            id: "departmentTile",
+                                            tileType:
+                                                "sap.ushell.ui.tile.StaticTile",
+
+                                            properties: {
+                                                title: "Departments",
+                                                subtitle:
+                                                    "Manage Departments",
+                                                icon:
+                                                    "sap-icon://org-chart",
+                                                targetURL:
+                                                    "#department-display"
+                                            }
+                                        }
+
+                                    ]
+                                },
+
+                                // =====================================
+                                // LEAVE MANAGEMENT
+                                // =====================================
+                                {
+                                    id: "LeaveManagement",
+                                    title: "Leave Management",
+                                    isPreset: true,
+                                    isVisible: true,
+
+                                    tiles: [
+
+                                        {
+                                            id: "employeeLeavesTile",
+                                            tileType:
+                                                "sap.ushell.ui.tile.StaticTile",
+
+                                            properties: {
+                                                title: "Employee Leaves",
+                                                
+                                                icon:
+                                                    "sap-icon://calendar",
+                                                subtitle:
+                                                    "Manage Employee Leaves",
+                                                targetURL:
+                                                    "#employeeleaves-display"
+                                            }
+                                        }
+
+                                    ]
+                                }
+
+                            ]
+
+                        }
+                    }
+                }
+
+            },
+
+            // =====================================
+            // APPLICATIONS
+            // =====================================
+
+            applications: {
+
+                "employeeleaves-display": {
+
+                    title: "Employee Leaves",
+
+                    description:
+                        "Manage Employee Leaves",
+
+                    additionalInformation:
+                        "SAPUI5.Component=employeeleaves",
+
+                    applicationType: "URL",
+
+                    url:
+                        "./employee_leaves/webapp",
+
+                    navigationMode: "embedded"
+                },
+
+                "employee-display": {
+
+                    title: "Employees",
+
+                    description:
+                        "Manage Employees",
+
+                    additionalInformation:
+                        "SAPUI5.Component=employee",
+
+                    applicationType: "URL",
+
+                    url:
+                        "./employee/webapp",
+
+                    navigationMode: "embedded"
+                },
+
+                "department-display": {
+
+                    title: "Departments",
+
+                    description:
+                        "Manage Departments",
+
+                    additionalInformation:
+                        "SAPUI5.Component=department",
+
+                    applicationType: "URL",
+
+                    url:
+                        "./department/webapp",
+
+                    navigationMode: "embedded"
+                },
+
+                "syncdata-display": {
+
+                    title: "Sync Data",
+
+                    description:
+                        "Synchronize Data",
+
+                    additionalInformation:
+                        "SAPUI5.Component=syncdata",
+
+                    applicationType: "URL",
+
+                    url:
+                        "./sync_data/webapp",
+
+                    navigationMode: "embedded"
+                }
+
+            }
+
+        };
+    </script>
+
+
+    <!-- Fiori Launchpad Sandbox -->
+    <script src="https://ui5.sap.com/test-resources/sap/ushell/bootstrap/sandbox.js">
+    </script>
+
+
+    <!-- SAPUI5 -->
+    <script id="sap-ui-bootstrap" src="https://sapui5.hana.ondemand.com/1.151.0/resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon" data-sap-ui-libs="sap.m,sap.ushell,sap.fe.templates"
+        data-sap-ui-compatVersion="edge" data-sap-ui-async="true" data-sap-ui-frameOptions="allow"></script>
+
+
+    <script>
+
+        sap.ui.getCore().attachInit(function () {
+
+            sap.ushell.Container
+                .createRenderer()
+                .placeAt("content");
+
+        });
+
+    </script>
+
+</head>
+
+
+<body class="sapUiBody sapUiSizeCompact" id="content">
+</body>
+
+</html>
