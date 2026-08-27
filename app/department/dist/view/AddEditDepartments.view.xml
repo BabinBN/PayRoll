@@ -1,0 +1,232 @@
+<mvc:View
+    controllerName="department.controller.AddEditDepartments"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:uxap="sap.uxap"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:tnt="sap.tnt"
+    xmlns:card="sap.f.cards"
+    xmlns:table="sap.ui.table"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:l="sap.ui.layout"
+    xmlns:field="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+
+    <f:DynamicPage
+        id="page_AddEditDepartment"
+        showFooter="{=!!${errors>/}.length}">
+
+        <f:title>
+            <f:DynamicPageTitle>
+
+                <f:heading>
+                    <Title
+                        text="{= ${departmentMdl>/id} ? 'Department : ' + ${departmentMdl>/id} : 'New Department'}"/>
+                </f:heading>
+
+                <f:actions>
+                    <Button
+                        id="btnSave"
+                        type="Emphasized"
+                        text="Save"
+                        press="onPressSave"
+                        class="sapUiTinyMarginBegin"/>
+
+                    <Button
+                        id="btnSaveClose"
+                        type="Transparent"
+                        text="Save and Close"
+                        press="onPressSaveClose"/>
+
+                    <Button
+                        id="btnClose"
+                        type="Transparent"
+                        text="Close"
+                        class="sapUiTinyMarginBegin"
+                        press="handleClose"/>
+                </f:actions>
+
+                <f:navigationActions>
+                    <OverflowToolbarButton
+                        type="Transparent"
+                        icon="sap-icon://full-screen"
+                        press="handleFullScreen"
+                        id="enterFullScreenBtn"
+                        tooltip="Enter Full Screen Mode"
+                        visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }"/>
+                </f:navigationActions>
+
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:content>
+
+            <Panel>
+
+                <form:SimpleForm
+                    id="sf_DeptForm"
+                    editable="true"
+                    layout="ColumnLayout"
+                    labelSpanXL="4"
+                    labelSpanL="4"
+                    labelSpanM="12"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanXL="0"
+                    emptySpanL="0"
+                    emptySpanM="0"
+                    emptySpanS="0"
+                    columnsXL="3"
+                    columnsL="2"
+                    columnsM="2">
+
+                    <form:content>
+
+                        <!-- Department Name -->
+                        <Label
+                            text="Department Name"
+                            required="true"/>
+
+                        <Input
+                            id="ip_name"
+                            value="{departmentMdl>/name}"
+                            placeholder="Enter Department Name"
+                            field:type="Input"
+                            field:validate="required"/>
+
+                        <!-- Branch -->
+                        <Label
+                            text="Branch"
+                            required="{= ${selectedCompanyMdl>/system_id} !== 5 }"/>
+
+                        <ComboBox
+                            id="cb_branch"
+                            placeholder="Select Branch"
+                            items="{branchesModel>/}"
+                            selectedKey="{departmentMdl>/branch_id}"
+                            showSecondaryValues="true"
+                            field:type="ComboBox"
+                            required="{= ${selectedCompanyMdl>/system_id} !== 5 }"
+                            enabled="{= ${departmentMdl>/location_id} ? true : false}">
+
+                            <core:ListItem
+                                key="{branchesModel>id}"
+                                text="{branchesModel>name}"/>
+
+                        </ComboBox>
+
+                        <!-- Company -->
+                        <Label
+                            text="Company"
+                            required="true"/>
+
+                        <ComboBox
+                            id="cb_company"
+                            placeholder="Select Company"
+                            items="{companyMdl>/}"
+                            selectedKey="{departmentMdl>/company_id}"
+                            showSecondaryValues="true"
+                            change="changeCompany"
+                            field:type="ComboBox"
+                            field:validate="required">
+
+                            <core:ListItem
+                                key="{companyMdl>id}"
+                                text="{companyMdl>name}"/>
+
+                        </ComboBox>
+
+                        <!-- Status -->
+                        <Label
+                            text="Status"
+                            required="true"/>
+
+                        <ComboBox
+                            id="cb_status"
+                            placeholder="Select Status"
+                            items="{masterDataMdl>/status}"
+                            selectedKey="{departmentMdl>/status}"
+                            showSecondaryValues="true"
+                            change="changeStatus"
+                            field:type="ComboBox"
+                            field:validate="required">
+
+                            <core:ListItem
+                                key="{masterDataMdl>value}"
+                                text="{masterDataMdl>description}"/>
+
+                        </ComboBox>
+
+                        <!-- Location -->
+                        <Label
+                            text="Location"
+                            required="true"/>
+
+                        <ComboBox
+                            id="cb_location"
+                            items="{locationsMdl>/}"
+                            placeholder="Select Location"
+                            selectedKey="{departmentMdl>/location_id}"
+                            editable="{= ${departmentMdl>/company_id} ? true : false }"
+                            change="changeLocation"
+                            field:type="ComboBox"
+                            field:validate="required">
+
+                            <core:Item
+                                key="{locationsMdl>id}"
+                                text="{locationsMdl>location}"/>
+
+                        </ComboBox>
+
+                        <!-- External ID -->
+                        <Label
+                            text="External ID"/>
+
+                        <ComboBox
+                            id="sel_ExternalID"
+                            placeholder="Select External ID"
+                            items="{departmentMasterMdl>/}"
+                            showSecondaryValues="true"
+                            selectedKey="{departmentMdl>/external_id}">
+
+                            <core:ListItem
+                                key="{departmentMasterMdl>externalCode}"
+                                text="{departmentMasterMdl>name}"
+                                additionalText="{departmentMasterMdl>externalCode}"/>
+
+                        </ComboBox>
+
+                    </form:content>
+
+                </form:SimpleForm>
+
+            </Panel>
+
+        </f:content>
+
+        <f:footer>
+            <Bar>
+
+                <contentLeft>
+
+                    <Button
+                        id="btn_Dept"
+                        class="sapUiTinyMarginTop"
+                        visible="{=!!${errors>/}.length}"
+                        icon="sap-icon://error"
+                        type="Negative"
+                        text="Errors"
+                        press=".handleMessagePopoverPress"
+                        ariaHasPopup="Dialog"/>
+
+                </contentLeft>
+
+            </Bar>
+        </f:footer>
+
+    </f:DynamicPage>
+
+</mvc:View>

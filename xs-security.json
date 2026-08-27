@@ -6,6 +6,14 @@
     {
       "name": "uaa.user",
       "description": "UAA"
+    },
+    {
+      "name": "$XSAPPNAME.EmployeeViewer",
+      "description": "View employee data"
+    },
+    {
+      "name": "$XSAPPNAME.EmployeeAdmin",
+      "description": "Manage employee data"
     }
   ],
   "role-templates": [
@@ -14,6 +22,20 @@
       "description": "UAA",
       "scope-references": [
         "uaa.user"
+      ]
+    },
+     {
+      "name": "EmployeeViewer",
+      "description": "UAA",
+      "scope-references": [
+        "$XSAPPNAME.EmployeeViewer"
+      ]
+    },
+     {
+      "name": "EmployeeAdmin",
+      "description": "UAA",
+      "scope-references": [
+        "$XSAPPNAME.EmployeeAdmin"
       ]
     }
   ]

@@ -24,7 +24,7 @@ cds:
   security:
     authentication:
       authConfig:
-        enabled: false
+        enabled: true
 
   health:                  #  inside cds
     defaults:
