@@ -12,6 +12,7 @@ sap.ui.define(
       {
         _pDialog: null,
         _file: null,
+         _pXLSXLoaded: null,
 
         override: {
           onInit: function () {
@@ -49,9 +50,79 @@ sap.ui.define(
                 );
               }.bind(this)
             );
+            this._loadXLSXLibrary();
           },
         },
+        _loadXLSXLibrary: function () {
+          if (this._pXLSXLoaded) {
+            return this._pXLSXLoaded;
+          }
 
+          // Try these in order if one CDN is blocked/unreachable.
+          var aCdnUrls = [
+            "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js",
+            "https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js",
+            "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"
+          ];
+
+          this._pXLSXLoaded = this._loadScriptWithFallback(aCdnUrls, 0);
+
+          return this._pXLSXLoaded;
+        },
+_loadScriptWithFallback: function (aUrls, iIndex) {
+          var that = this;
+
+          return new Promise(function (resolve, reject) {
+            if (typeof window.XLSX !== "undefined") {
+              resolve(window.XLSX);
+              return;
+            }
+
+            if (iIndex >= aUrls.length) {
+              reject(
+                new Error(
+                  "Could not load XLSX library from any configured source. " +
+                  "Check network access / Content-Security-Policy settings."
+                )
+              );
+              return;
+            }
+
+            var sUrl = aUrls[iIndex];
+            var oScript = document.createElement("script");
+            oScript.src = sUrl;
+            oScript.async = true;
+
+            oScript.onload = function () {
+              if (typeof window.XLSX !== "undefined") {
+                console.log("[XLSX loader] Loaded from:", sUrl);
+                resolve(window.XLSX);
+              } else {
+                console.warn(
+                  "[XLSX loader] Script loaded but XLSX undefined, trying next source:",
+                  sUrl
+                );
+                that
+                  ._loadScriptWithFallback(aUrls, iIndex + 1)
+                  .then(resolve)
+                  .catch(reject);
+              }
+            };
+
+            oScript.onerror = function () {
+              console.warn(
+                "[XLSX loader] Failed to load, trying next source:",
+                sUrl
+              );
+              that
+                ._loadScriptWithFallback(aUrls, iIndex + 1)
+                .then(resolve)
+                .catch(reject);
+            };
+
+            document.head.appendChild(oScript);
+          });
+        },
         onUploadExcel: function () {
           if (!this._pDialog) {
             this._pDialog = Fragment.load({
@@ -140,64 +211,80 @@ sap.ui.define(
           );
         },
 
-        onUploadPress: function () {
+         onUploadPress: function () {
           if (!this._file) {
             MessageToast.show("Please select an Excel file first.");
             return;
           }
 
-          var oReader = new FileReader();
+          MessageToast.show("Preparing file...");
 
-          oReader.onload = function (e) {
-            try {
-              var data = new Uint8Array(e.target.result);
+          // Make sure XLSX is loaded BEFORE we try to read the file.
+          this._loadXLSXLibrary()
+            .then(
+              function (XLSX) {
+                var oReader = new FileReader();
 
-              var workbook = XLSX.read(data, {
-                type: "array",
-                cellDates: true,
-              });
+                oReader.onload = function (e) {
+                  try {
+                    var data = new Uint8Array(e.target.result);
 
-              console.log("[onUploadPress] Sheets:", workbook.SheetNames);
+                    var workbook = XLSX.read(data, {
+                      type: "array",
+                      cellDates: true,
+                    });
 
-              var sheetName = workbook.SheetNames[0];
+                    console.log("[onUploadPress] Sheets:", workbook.SheetNames);
+                      debugger
+                    var sheetName = workbook.SheetNames[0];
 
-              if (!sheetName) {
-                throw new Error("No sheets found in workbook.");
-              }
+                    if (!sheetName) {
+                      throw new Error("No sheets found in workbook.");
+                    }
 
-              var oSheet = workbook.Sheets[sheetName];
+                    var oSheet = workbook.Sheets[sheetName];
 
-              var aExcelData = XLSX.utils.sheet_to_json(oSheet, {
-                defval: "",
-              });
+                    var aExcelData = XLSX.utils.sheet_to_json(oSheet, {
+                      defval: "",
+                    });
 
-              console.log(
-                "[onUploadPress] Parsed rows:",
-                aExcelData.length,
-                aExcelData
-              );
+                    console.log(
+                      "[onUploadPress] Parsed rows:",
+                      aExcelData.length,
+                      aExcelData
+                    );
 
-              if (aExcelData.length === 0) {
-                MessageToast.show("No data found in the Excel file.");
-                return;
-              }
+                    if (aExcelData.length === 0) {
+                      MessageToast.show("No data found in the Excel file.");
+                      return;
+                    }
 
-              this._callOdataService(aExcelData);
-            } catch (error) {
-              console.error("[onUploadPress] Excel parse error:", error);
+                    this._callOdataService(aExcelData);
+                  } catch (error) {
+                    console.error("[onUploadPress] Excel parse error:", error);
 
-              MessageToast.show(
-                "Error reading Excel file: " + error.message
-              );
-            }
-          }.bind(this);
+                    MessageToast.show(
+                      "Error reading Excel file: " + error.message
+                    );
+                  }
+                }.bind(this);
 
-          oReader.onerror = function (error) {
-            console.error("[onUploadPress] FileReader error:", error);
-            MessageToast.show("Could not read the selected file.");
-          };
+                oReader.onerror = function (error) {
+                  console.error("[onUploadPress] FileReader error:", error);
+                  MessageToast.show("Could not read the selected file.");
+                };
 
-          oReader.readAsArrayBuffer(this._file);
+                oReader.readAsArrayBuffer(this._file);
+              }.bind(this)
+            )
+            .catch(
+              function (oError) {
+                console.error("[onUploadPress] XLSX load error:", oError);
+                MessageToast.show(
+                  "Could not load Excel library: " + oError.message
+                );
+              }.bind(this)
+            );
         },
 
         _callOdataService: function (aExcelData) {

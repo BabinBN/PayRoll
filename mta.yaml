@@ -11,7 +11,7 @@ modules:
     JBP_CONFIG_SAP_MACHINE_JRE: '{ version: 21.+ }'
     SPRING_PROFILES_ACTIVE: cloud,sandbox
   requires:
-  - name: PayRoll-db
+  # - name: PayRoll-db
   - name: uaa_PayRoll
   provides:
   - name: srv-api
@@ -25,17 +25,17 @@ modules:
     builder: custom
     commands:
     - mvn clean package -DskipTests=true --batch-mode
-- name: PayRoll-db-deployer
-  type: hdb
-  path: db
-  requires:
-  - name: PayRoll-db
-  parameters:
-    buildpack: nodejs_buildpack
-  build-parameters:
-    builder: custom
-    commands:
-    - npm run build
+# - name: PayRoll-db-deployer
+#   type: hdb
+#   path: db
+#   requires:
+#   - name: PayRoll-db
+#   parameters:
+#     buildpack: nodejs_buildpack
+#   build-parameters:
+#     builder: custom
+#     commands:
+#     - npm run build
 - name: PayRoll-destination-content
   type: com.sap.application.content
   requires:
@@ -147,11 +147,11 @@ modules:
     - npm run build:cf
     supported-platforms: []
 resources:
-- name: PayRoll-db
-  type: com.sap.xs.hdi-container
-  parameters:
-    service: hana
-    service-plan: hdi-shared
+# - name: PayRoll-db
+#   type: com.sap.xs.hdi-container
+#   parameters:
+#     service: hana
+#     service-plan: hdi-shared
 - name: PayRoll-destination-service
   type: org.cloudfoundry.managed-service
   parameters:

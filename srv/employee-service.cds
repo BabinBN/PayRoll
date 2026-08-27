@@ -7,28 +7,28 @@ using {Enumerators as enum} from '../db/Enumerators/Enumerators';
 service Employee {
     @cds.redirection.target
     @odata.draft.enabled
-    @restrict: [
-        {
-            grant: 'READ',
-            to   : 'EmployeeViewer'
-        },
-        {
-            grant: '*',
-            to   : 'EmployeeAdmin'
-        }
-    ]
+    // @restrict: [
+    //     {
+    //         grant: 'READ',
+    //         to   : 'EmployeeViewer'
+    //     },
+    //     {
+    //         grant: '*',
+    //         to   : 'EmployeeAdmin'
+    //     }
+    // ]
     entity Employees       as projection on Emp.Employees;
 
     @readonly
-    @requires: 'EmployeeViewer'
+    // @requires: 'EmployeeViewer'
     entity Status          as projection on Emp.Status;
 
     @readonly
-    @requires: 'EmployeeViewer'
+    // @requires: 'EmployeeViewer'
     entity EmploymentTypes as projection on enum.employeement_Type;
 
     // @odata.draft.enabled
-    @requires: 'EmployeeViewer'
+    // @requires: 'EmployeeViewer'
     entity EmployeeLeaves  as projection on Emp.EmployeeLeaves;
 }
 
