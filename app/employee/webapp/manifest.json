@@ -148,12 +148,13 @@
               "controlConfiguration": {
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
-                    "type": "ResponsiveTable"
+                    "type": "ResponsiveTable",
+                    "enableExport": true
                   },
                   "actions": {
                     "uploadexcel": {
                       "visible": true,
-                      "enabled": true,
+                      "enabled": false,
                       "requiresSelection": false,
                       "text": "Upload Excel"
                     }

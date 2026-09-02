@@ -1,78 +1,145 @@
 package customer.payroll.Handlers;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sap.cds.ql.Insert;
 import com.sap.cds.services.ErrorStatuses;
 import com.sap.cds.services.ServiceException;
-import com.sap.cds.services.cds.CdsCreateEventContext;
-import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
-import com.sap.cds.services.handler.annotations.Before;
+import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
+import com.sap.cds.services.persistence.PersistenceService;
+
+import cds.gen.employee.BulkCreateEmployeesContext;
+import cds.gen.employee.EmployeeInput;
+import cds.gen.employee.Employees;
+import cds.gen.employee.Employees_;
 
 @Component
 @ServiceName("Employee")
 public class EmployeeHandler implements EventHandler {
-    @SuppressWarnings("unused")
-    @Before(event = CqnService.EVENT_CREATE, entity = "Employee.Employees")
-    public void onCreateEmployee(CdsCreateEventContext context) {
 
-        Map<String, Object> data = context.getCqn().entries().get(0);
+    @Autowired
+    private PersistenceService db;
 
-        String empCode = (String) data.get("emp_code");
-        Integer companyId = data.get("company_id") != null
-                ? ((Number) data.get("company_id")).intValue()
-                : null;
+    @On(event = "bulkCreateEmployees")
+    public void onBulkCreateEmployees(BulkCreateEmployeesContext context) {
 
-        String externalEmpId = (String) data.get("external_emp_id");
-        String firstName = (String) data.get("first_name");
-        String middleName = (String) data.get("middle_name");
-        String lastName = (String) data.get("last_name");
-        String gender = (String) data.get("gender");
-        String maritalStatus = (String) data.get("marital_status");
-        String dob = String.valueOf(data.get("dob"));
-        String email = (String) data.get("email");
-        String mobile = (String) data.get("mobile");
-        String nationality = (String) data.get("nationality");
-        String timeProcess = (String) data.get("time_process");
+        // Payload type is Collection<EmployeeInput>
+        Collection<EmployeeInput> payloads = context.getPayloads();
 
-        Integer payrollPeriodId = data.get("payroll_period_id") != null
-                ? ((Number) data.get("payroll_period_id")).intValue()
-                : null;
+        if (payloads == null || payloads.isEmpty()) {
 
-        String joinedDate = String.valueOf(data.get("joined_date"));
-
-        Integer employmentStatusId = data.get("employment_status_id") != null
-                ? ((Number) data.get("employment_status_id")).intValue()
-                : null;
-
-        Boolean finalPaymentStatus = (Boolean) data.get("final_payment_status");
-
-        String status = (String) data.get("status");
-
-        if (empCode == null || empCode.isBlank()) {
-            throw new ServiceException(ErrorStatuses.BAD_REQUEST,
-                    "Employee Code is mandatory");
+            throw new ServiceException(
+                    ErrorStatuses.BAD_REQUEST,
+                    "No employee records provided.");
         }
 
-        if (firstName == null || firstName.isBlank()) {
-            throw new ServiceException(ErrorStatuses.BAD_REQUEST,
-                    "First Name is mandatory");
+        List<Employees> toInsert = new ArrayList<>();
+
+        for (EmployeeInput row : payloads) {
+
+            validateRow(row);
+
+            Employees emp = Employees.create();
+
+            emp.setEmpCode(row.getEmpCode());
+
+            emp.setCompanyId(row.getCompanyId());
+
+            emp.setExternalEmpId(row.getExternalEmpId());
+
+            emp.setFirstName(row.getFirstName());
+
+            emp.setMiddleName(row.getMiddleName());
+
+            emp.setLastName(row.getLastName());
+
+            emp.setGender(row.getGender());
+
+            emp.setMaritalStatus(row.getMaritalStatus());
+
+            emp.setDob(row.getDob());
+
+            emp.setEmail(row.getEmail());
+
+            emp.setMobile(row.getMobile());
+
+            emp.setNationality(row.getNationality());
+
+            emp.setTimeProcess(row.getTimeProcess());
+
+            emp.setPayrollPeriodId(row.getPayrollPeriodId());
+
+            emp.setJoinedDate(row.getJoinedDate());
+
+            emp.setEmploymentStatusId(row.getEmploymentStatusId());
+
+            emp.setFinalPaymentStatus(row.getFinalPaymentStatus());
+
+            if (row.getStatusId() != null) {
+
+                emp.setStatusId(
+                        row.getStatusId());
+
+            } else {
+
+                emp.setStatusId(1);
+            }
+
+            toInsert.add(emp);
+        }
+       db.run( Insert.into(Employees_.class) .entries(toInsert) );
+
+        /*
+         * Bulk insert into HANA
+         */
+        // List<Employees> created = db.run(Insert.into(Employees_.class).entries(toInsert)).listOf(Employees.class);
+
+        // /*
+        //  * Return result
+        //  */
+        // context.setResult(created);
+
+        context.setCompleted();
+    }
+
+    private void validateRow(
+            EmployeeInput row) {
+
+        String empCode = row.getEmpCode();
+
+        String firstName = row.getFirstName();
+
+        String email = row.getEmail();
+
+        if (empCode == null ||
+                empCode.isBlank()) {
+
+            throw new ServiceException(
+                    ErrorStatuses.BAD_REQUEST,
+                    "Employee Code is mandatory.");
         }
 
-        if (email == null || email.isBlank()) {
-            throw new ServiceException(ErrorStatuses.BAD_REQUEST,
-                    "Email is mandatory");
+        if (firstName == null ||
+                firstName.isBlank()) {
+
+            throw new ServiceException(
+                    ErrorStatuses.BAD_REQUEST,
+                    "First Name is mandatory.");
         }
 
-        if (status == null || status.isBlank()) {
-            data.put("status", "Active");
-        }
+        if (email == null ||
+                email.isBlank()) {
 
-        if (finalPaymentStatus == null) {
-            data.put("final_payment_status", false);
+            throw new ServiceException(
+                    ErrorStatuses.BAD_REQUEST,
+                    "Email is mandatory.");
         }
     }
 }

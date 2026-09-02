@@ -8,7 +8,7 @@
     <title>Payroll - Local Launchpad</title>
 
     <script>
-        
+
         window["sap-ushell-config"] = {
 
             defaultRenderer: "fiori2",
@@ -120,13 +120,56 @@
 
                                             properties: {
                                                 title: "Employee Leaves",
-                                                
+
                                                 icon:
-                                                    "sap-icon://calendar",
+                                                    "sap-icon://request",
                                                 subtitle:
                                                     "Manage Employee Leaves",
                                                 targetURL:
                                                     "#employeeleaves-display"
+                                            }
+                                        },
+                                        {
+                                            id: "holidaycalenderTile",
+                                            tileType:
+                                                "sap.ushell.ui.tile.StaticTile",
+
+                                            properties: {
+                                                title: "Holiday Calender",
+
+                                                icon:
+                                                    "sap-icon://calendar",
+                                                subtitle:
+                                                    "Manage Holiday Calendar",
+                                                targetURL:
+                                                    "#holidaycalendar-display"
+                                            }
+                                        }
+
+                                    ]
+                                },
+                                // =====================================
+                                {
+                                    id: "MassData",
+                                    title: "Mass Data",
+                                    isPreset: true,
+                                    isVisible: true,
+
+                                    tiles: [
+
+                                        {
+                                            id: "EmployeeMasterDataBulkUploadtile",
+                                            tileType:
+                                                "sap.ushell.ui.tile.StaticTile",
+
+                                            properties: {
+                                                title: "Employee Master Data Bulk Upload",
+                                                icon:
+                                                    "sap-icon://upload",
+                                                subtitle:
+                                                    "Employee Master Data Bulk Upload",
+                                                targetURL:
+                                                    "#EmployeeMasterDataBulkUploadtile-display"
                                             }
                                         }
 
@@ -161,6 +204,23 @@
 
                     url:
                         "./employee_leaves/webapp",
+
+                    navigationMode: "embedded"
+                },
+                "holidaycalendar-display": {
+
+                    title: "Holiday Calendar",
+
+                    description:
+                        "Manage Holiday Calendar",
+
+                    additionalInformation:
+                        "SAPUI5.Component=holidaycalender",
+
+                    applicationType: "URL",
+
+                    url:
+                        "./holidaycalender/webapp",
 
                     navigationMode: "embedded"
                 },
@@ -215,6 +275,23 @@
 
                     url:
                         "./sync_data/webapp",
+
+                    navigationMode: "embedded"
+                },
+                "EmployeeMasterDataBulkUploadtile-display":
+                {
+                    title: "Employee Master Data Bulk Upload",
+
+                    description:
+                        "Employee Master Data Bulk Upload",
+
+                    additionalInformation:
+                        "SAPUI5.Component=employeemasterdatabulkupload",
+
+                    applicationType: "URL",
+
+                    url:
+                        "./employee_master_data_bulk_upload/webapp",
 
                     navigationMode: "embedded"
                 }

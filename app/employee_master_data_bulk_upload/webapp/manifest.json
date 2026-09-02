@@ -1,0 +1,131 @@
+{
+  "_version": "1.86.0",
+  "sap.app": {
+    "id": "employeemasterdatabulkupload",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.31.1",
+      "toolsId": "5aefe502-86e4-4e13-8928-f21f2335e08f"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/service/Empdt/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Employee_Bulk_Upload-ManageEmployee_Bulk_Upload": {
+          "semanticObject": "Employee_Bulk_Upload",
+          "action": "ManageEmployee_Bulk_Upload",
+          "title": "{{Employee_Bulk_Upload-ManageEmployee_Bulk_Upload.flpTitle}}",
+          "subTitle": "{{Employee_Bulk_Upload-ManageEmployee_Bulk_Upload.flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.151.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "employeemasterdatabulkupload.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "employeemasterdatabulkupload.view",
+        "async": true,
+        "viewPath": "employeemasterdatabulkupload.view"
+      },
+      "routes": [
+        {
+          "name": "Routeemployee_master_data_bulk_upload",
+          "pattern": ":?query:",
+          "target": [
+            "Targetemployee_master_data_bulk_upload"
+          ]
+        }
+      ],
+      "targets": {
+        "Targetemployee_master_data_bulk_upload": {
+          "id": "employee_master_data_bulk_upload",
+          "name": "employee_master_data_bulk_upload"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "employeemasterdatabulkupload.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}
