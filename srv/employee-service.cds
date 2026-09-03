@@ -17,7 +17,8 @@ service Employee {
     //         to   : 'EmployeeAdmin'
     //     }
     // ]
-    entity Employees       as projection on Emp.Employees;
+    entity Employees as projection on Emp.Employees 
+    {*,virtual statusCriticality : Integer};
 
     type EmployeeInput : {
         emp_code             : String;
@@ -44,12 +45,15 @@ service Employee {
 
     action bulkCreateEmployees(payloads: array of EmployeeInput);
 
-    @readonly
+
+   @readonly
+    @cds.redirection.target
     // @requires: 'EmployeeViewer'
     entity Status          as projection on Emp.Status;
 
-    @readonly
     // @requires: 'EmployeeViewer'
+    @readonly
+    @cds.redirection.target
     entity EmploymentTypes as projection on enum.employeement_Type;
 
     // @odata.draft.enabled

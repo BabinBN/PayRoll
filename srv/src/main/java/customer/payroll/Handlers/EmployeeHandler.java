@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import com.sap.cds.ql.Insert;
 import com.sap.cds.services.ErrorStatuses;
 import com.sap.cds.services.ServiceException;
+import com.sap.cds.services.cds.CqnService;
 import com.sap.cds.services.handler.EventHandler;
+import com.sap.cds.services.handler.annotations.After;
 import com.sap.cds.services.handler.annotations.On;
 import com.sap.cds.services.handler.annotations.ServiceName;
 import com.sap.cds.services.persistence.PersistenceService;
@@ -94,23 +96,23 @@ public class EmployeeHandler implements EventHandler {
 
             toInsert.add(emp);
         }
-       db.run( Insert.into(Employees_.class) .entries(toInsert) );
+        db.run(Insert.into(Employees_.class).entries(toInsert));
 
         /*
          * Bulk insert into HANA
          */
-        // List<Employees> created = db.run(Insert.into(Employees_.class).entries(toInsert)).listOf(Employees.class);
+        // List<Employees> created =
+        // db.run(Insert.into(Employees_.class).entries(toInsert)).listOf(Employees.class);
 
         // /*
-        //  * Return result
-        //  */
+        // * Return result
+        // */
         // context.setResult(created);
 
         context.setCompleted();
     }
 
-    private void validateRow(
-            EmployeeInput row) {
+    private void validateRow(EmployeeInput row) {
 
         String empCode = row.getEmpCode();
 
@@ -140,6 +142,25 @@ public class EmployeeHandler implements EventHandler {
             throw new ServiceException(
                     ErrorStatuses.BAD_REQUEST,
                     "Email is mandatory.");
+        }
+    }
+
+    @After(event = CqnService.EVENT_READ, entity = Employees_.CDS_NAME)
+    public void afterReadEmployees(List<Employees> employees) {
+
+        for (Employees employee : employees) {
+
+            Integer statusId = employee.getStatusId();
+
+            if (statusId == null) {
+                employee.setStatusCriticality(0);
+            } else if (statusId == 1) {
+                employee.setStatusCriticality(3); // Green
+            } else if (statusId == 2) {
+                employee.setStatusCriticality(1); // Red
+            } else {
+                employee.setStatusCriticality(0); // Neutral
+            }
         }
     }
 }

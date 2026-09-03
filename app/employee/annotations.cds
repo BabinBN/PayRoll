@@ -88,6 +88,11 @@ annotate service.Employees with @(
             Value : joined_date,
             Label : 'Joined Date',
         },
+        {
+            $Type : 'UI.DataField',
+            Value : status_ID,
+            Criticality : statusCriticality,
+        },
     ],
     UI.Identification : [
         
@@ -107,11 +112,6 @@ annotate service.Employees with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : jobDetails.employment_type,
-                Label : 'employment_type',
-            },
-            {
-                $Type : 'UI.DataField',
                 Value : jobDetails.start_date,
                 Label : 'start_date',
             },
@@ -124,6 +124,10 @@ annotate service.Employees with @(
                 $Type : 'UI.DataField',
                 Value : jobDetails.end_date,
                 Label : 'end_date',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : jobDetails.employment_type_ID,
             },
         ],
     },
@@ -223,8 +227,7 @@ annotate service.Employees with @(
             },
             {
                 $Type : 'UI.DataField',
-                Value : status,
-                Label : 'Status',
+                Value : status_ID,
             },
         ],
     },
@@ -301,12 +304,14 @@ annotate service.Employees with @(
                 Value : additionalInformation.emirates_id,
                 Label : 'emirates_id',
             },
+            {
+                $Type : 'UI.DataField',
+                Value : additionalInformation.emp_type_ID,
+            },
         ],
     },
     UI.SelectionFields : [
         emp_code,
-        joined_date,
-        external_emp_id,
         status_ID,
         additionalInformation.emp_type_ID,
     ],
@@ -356,8 +361,8 @@ annotate service.EmployeeBankDetails with @(
         },
         {
             $Type : 'UI.DataField',
-            Value : employee.bankDetails.status,
-            Label : 'status',
+            Value : status_ID,
+            Label : 'status_ID',
         },
     ]
 );
@@ -374,6 +379,18 @@ annotate service.Employees with {
                     LocalDataProperty : emp_code,
                     ValueListProperty : 'emp_code',
                 },
+                {
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'email',
+                },
+                {
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'gender',
+                },
+                {
+                    $Type : 'Common.ValueListParameterDisplayOnly',
+                    ValueListProperty : 'status/Name_status',
+                },
             ],
             Label : 'employee code',
         },
@@ -388,6 +405,8 @@ annotate service.Employees with {
 annotate service.Employees with {
     status @(
         Common.Label : 'Status',
+        Common.Text : status.Name_status,
+        Common.Text.@UI.TextArrangement : #TextOnly,
         Common.ValueList : {
             $Type : 'Common.ValueListType',
             CollectionPath : 'Status',
@@ -398,7 +417,6 @@ annotate service.Employees with {
                     ValueListProperty : 'ID',
                 },
             ],
-            Label : 'Status',
         },
         Common.ValueListWithFixedValues : true,
         )
@@ -407,20 +425,22 @@ annotate service.Employees with {
 annotate service.EmployeeJobDetails with {
     employment_type @(
         Common.Label : 'Employee Type',
+        Common.Text : employment_type.employeement_Type_Name,
+        Common.Text.@UI.TextArrangement : #TextOnly,
         Common.ValueList : {
             $Type : 'Common.ValueListType',
-            CollectionPath : 'EmployeeJobDetails',
+            CollectionPath : 'EmploymentTypes',
             Parameters : [
                 {
                     $Type : 'Common.ValueListParameterInOut',
-                    LocalDataProperty : employment_type,
-                    ValueListProperty : 'employment_type',
+                    LocalDataProperty : employment_type_ID,
+                    ValueListProperty : 'ID',
                 },
             ],
             Label : 'Employee Type',
         },
         Common.ValueListWithFixedValues : true,
-    )
+        )
 };
 
 annotate service.Employees with {
@@ -456,5 +476,26 @@ annotate service.EmploymentTypes with {
     ID @(
         Common.Text : employeement_Type_Name,
         Common.Text.@UI.TextArrangement : #TextOnly,
+)};
+
+annotate service.EmployeeJobDetails with {
+    start_date @Common.Text : employment_type.employeement_Type_Name
+};
+
+annotate service.EmployeeBankDetails with {
+    status @(
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'Status',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : status_ID,
+                    ValueListProperty : 'ID',
+                },
+            ],
+            Label : 'Status',
+        },
+        Common.ValueListWithFixedValues : true,
 )};
 

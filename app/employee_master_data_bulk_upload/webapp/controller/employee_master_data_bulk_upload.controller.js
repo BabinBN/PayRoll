@@ -754,6 +754,12 @@ sap.ui.define([
                             " employee records uploaded successfully."
                         );
 
+                        this.byId("upload").clear();
+
+                        this._file = null;
+
+                        this._aExcelData = [];
+
                         oModel.refresh();
 
                     })
