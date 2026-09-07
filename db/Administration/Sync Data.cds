@@ -7,5 +7,5 @@ using {
 
 entity sync_data:cuid,managed{
     object_name:String(100);
-    synced_date:Timestamp
+    synced_date:DateTime
 }

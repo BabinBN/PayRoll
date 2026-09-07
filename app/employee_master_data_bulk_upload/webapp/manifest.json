@@ -1,5 +1,5 @@
 {
-  "_version": "1.86.0",
+  "_version": "1.89.0",
   "sap.app": {
     "id": "employeemasterdatabulkupload",
     "type": "application",
@@ -12,8 +12,8 @@
     "resources": "resources.json",
     "sourceTemplate": {
       "id": "@sap/generator-fiori:basic",
-      "version": "1.31.1",
-      "toolsId": "5aefe502-86e4-4e13-8928-f21f2335e08f"
+      "version": "1.32.0",
+      "toolsId": "563530ec-d893-4bc3-b0c6-2d038f39a108"
     },
     "dataSources": {
       "mainService": {
@@ -27,11 +27,11 @@
     },
     "crossNavigation": {
       "inbounds": {
-        "Employee_Bulk_Upload-ManageEmployee_Bulk_Upload": {
-          "semanticObject": "Employee_Bulk_Upload",
-          "action": "ManageEmployee_Bulk_Upload",
-          "title": "{{Employee_Bulk_Upload-ManageEmployee_Bulk_Upload.flpTitle}}",
-          "subTitle": "{{Employee_Bulk_Upload-ManageEmployee_Bulk_Upload.flpSubtitle}}",
+        "employee_bulk_upload-manage_Bulk_Upload": {
+          "semanticObject": "employee_bulk_upload",
+          "action": "manage_Bulk_Upload",
+          "title": "{{employee_bulk_upload-manage_Bulk_Upload.flpTitle}}",
+          "subTitle": "{{employee_bulk_upload-manage_Bulk_Upload.flpSubtitle}}",
           "signature": {
             "parameters": {},
             "additionalParameters": "allowed"
@@ -59,7 +59,7 @@
   "sap.ui5": {
     "flexEnabled": true,
     "dependencies": {
-      "minUI5Version": "1.151.0",
+      "minUI5Version": "1.152.0",
       "libs": {
         "sap.m": {},
         "sap.ui.core": {}
@@ -127,5 +127,9 @@
       "id": "App",
       "async": true
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "payroll_BN"
   }
 }

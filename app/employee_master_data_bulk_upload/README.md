@@ -1,18 +1,18 @@
 ## Application Details
 |               |
 | ------------- |
-|**Generation Date and Time**<br>Wed Sep 02 2026 06:53:02 GMT+0000 (Coordinated Universal Time)|
+|**Generation Date and Time**<br>Mon Sep 07 2026 10:22:16 GMT+0000 (Coordinated Universal Time)|
 |**App Generator**<br>SAP Fiori Application Generator|
-|**App Generator Version**<br>1.31.1|
+|**App Generator Version**<br>1.32.0|
 |**Generation Platform**<br>SAP Business Application Studio|
 |**Template Used**<br>Basic V4|
 |**Service Type**<br>Local CAP|
 |**Service URL**<br>http://localhost:4004/odata/v4/service/Empdt/|
 |**Module Name**<br>employee_master_data_bulk_upload|
-|**Application Title**<br>Employee Master Data Bulk Upload|
+|**Application Title**<br>App Title|
 |**Namespace**<br>|
 |**UI5 Theme**<br>sap_horizon|
-|**UI5 Version**<br>1.151.0|
+|**UI5 Version**<br>1.152.0|
 |**Enable TypeScript**<br>False|
 |**Add Eslint configuration**<br>True, see https://www.npmjs.com/package/@sap-ux/eslint-plugin-fiori-tools#rules for the eslint rules.|
 

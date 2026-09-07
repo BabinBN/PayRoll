@@ -189,7 +189,8 @@
 									}
 								}
 							},
-							"defaultTemplateAnnotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#tableView"
+							"defaultTemplateAnnotationPath": "com.sap.vocabularies.UI.v1.SelectionPresentationVariant#tableView",
+							"initialLoad": "Auto"
 						}
 					}
 				},
@@ -209,7 +210,10 @@
 	},
 	"sap.fe": {
 		"app": {
-			"enableLazyLoading": true
+			"enableLazyLoading": true,
+			"hideDraft": {
+				"enabled": false
+			}
 		}
 	},
 	"sap.cloud": {

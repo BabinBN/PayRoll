@@ -12,6 +12,7 @@ modules:
     SPRING_PROFILES_ACTIVE: cloud,sandbox
   requires:
   - name: uaa_PayRoll
+  - name: PayRoll-db
   provides:
   - name: srv-api
     properties:
@@ -24,6 +25,17 @@ modules:
     builder: custom
     commands:
     - mvn clean package -DskipTests=true --batch-mode
+- name: PayRoll-db-deployer
+  type: hdb
+  path: db
+  parameters:
+    buildpack: nodejs_buildpack
+  build-parameters:
+    builder: custom
+    commands:
+      - npm run build
+  requires:
+    - name: PayRoll-db
 - name: PayRoll-destination-content
   type: com.sap.application.content
   requires:
@@ -149,6 +161,11 @@ modules:
     - npm run build:cf
     supported-platforms: []
 resources:
+- name: PayRoll-db
+  type: com.sap.xs.hdi-container
+  parameters:
+    service: hana
+    service-plan: hdi-shared
 - name: PayRoll-destination-service
   type: org.cloudfoundry.managed-service
   parameters:

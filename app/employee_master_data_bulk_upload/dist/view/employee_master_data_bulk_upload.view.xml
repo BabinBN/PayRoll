@@ -1,0 +1,58 @@
+<mvc:View controllerName="employeemasterdatabulkupload.controller.employee_master_data_bulk_upload"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:u="sap.ui.unified"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:uxap="sap.uxap"
+    xmlns:tnt="sap.tnt"
+    xmlns:table="sap.ui.table"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:smartForm="sap.ui.comp.smartform"
+    xmlns:smartField="sap.ui.comp.smartfield"
+    xmlns:card="sap.f.cards"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:layout="sap.ui.layout"
+    xmlns:field="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+    <f:DynamicPage id="page_EmployeeMasterDataBulkUpload" fitContent="true" headerExpanded="true" showFooter="{=!!${errors>/}.length}">
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title id="titleId" text="{i18n>emdbu_title}"/>
+                </f:heading>
+                <f:actions>
+                    <!-- <Button id="dowload" type="Ghost" text="{i18n>nocpt_jump_to}" press="onPressGoTo" ariaHasPopup="Menu" visible="{= ${buttonVisibleMsl>/key} === '1'}"/> -->
+                    <!-- <Button id="dowload" type="Ghost" text="{i18n>emdbu_download}" press="onPressDownloadEmployees" visible="{= ${buttonVisibleMsl>/key} === '2'}"/>
+                    <Button id="createEmployee" type="Ghost" text="Download Template" press="onPressEmployeeTemplateBu" visible="{= ${buttonVisibleMsl>/key} === '1'}"/> -->
+                    <!-- <u:FileUploader id="upload" iconOnly="false" buttonOnly="true" tooltip="Upload" iconFirst="false" change="onPressUploadEmployees" sameFilenameAllowed="true" visible="{= ${buttonVisibleMsl>/key} === '2'}"/> -->
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:content>
+            <IconTabBar id="ffTabBar" stretchContentHeight="true" backgroundDesign="Transparent" expandable="false" applyContentPadding="false" expanded="{device>/isNoPhone}" class="sapUiResponsiveContentPadding" select = "onChangeTabBar">
+                <items>
+                    <!-- Bulk Upload -->
+                    <IconTabFilter  key ='3' text="{i18n>emdbu_upload_title}">
+                        <Panel alignItems="Center" width="100%">
+                            <HBox width="100%">
+                                <VBox width="50%">
+                                    <u:FileUploader width="100%" id="upload" change="handleValueChange" sameFilenameAllowed="true" placeholder="{i18n>emdu_chooseafileforupload}"/>
+                                </VBox>
+                                <VBox width="50%">
+                                    <Button class="sapUiTinyMarginBegin" text="{i18n>emdu_uploadfile}" press="handleUploadPress"/>
+                                </VBox>
+                            </HBox>
+                        </Panel>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </f:content>
+        <f:footer>
+            <Toolbar>
+                <Button id="btn_EmployeeMasterDataBulkUpdateError" visible="{=!!${errors>/}.length}" icon="sap-icon://error" type="Negative" text="{i18n>emdu_error}" press=".handleMessagePopoverPress" ariaHasPopup="Dialog" />
+            </Toolbar>
+        </f:footer>
+    </f:DynamicPage>
+</mvc:View>
