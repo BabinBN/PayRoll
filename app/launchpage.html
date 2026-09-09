@@ -97,7 +97,23 @@
                                                 targetURL:
                                                     "#department-display"
                                             }
+                                        },
+                                        {
+                                            id: "branch",
+                                            tileType:
+                                                "sap.ushell.ui.tile.StaticTile",
+
+                                            properties: {
+                                                title: "Branch",
+                                                subtitle:
+                                                    "Manage Branch",
+                                                icon:
+                                                    "sap-icon://building",
+                                                targetURL:
+                                                    "#branch-display"
+                                            }
                                         }
+
 
                                     ]
                                 },
@@ -292,6 +308,23 @@
 
                     url:
                         "./employee_master_data_bulk_upload/webapp",
+
+                    navigationMode: "embedded"
+                },
+                "branch-display":
+                {
+                     title: "Branch",
+
+                    description:
+                        "Branch",
+
+                    additionalInformation:
+                        "SAPUI5.Component=branch",
+
+                    applicationType: "URL",
+
+                    url:
+                        "./branch/webapp",
 
                     navigationMode: "embedded"
                 }

@@ -10,3 +10,5 @@ using from './sync_data/annotations';
 using from './department/annotations';
 
 using from './employee_master_data_bulk_upload/annotations';
+
+using from './branch/annotations';

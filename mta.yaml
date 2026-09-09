@@ -28,14 +28,14 @@ modules:
 - name: PayRoll-db-deployer
   type: hdb
   path: db
+  requires:
+  - name: PayRoll-db
   parameters:
     buildpack: nodejs_buildpack
   build-parameters:
     builder: custom
     commands:
-      - npm run build
-  requires:
-    - name: PayRoll-db
+    - npm run build
 - name: PayRoll-destination-content
   type: com.sap.application.content
   requires:
@@ -100,6 +100,10 @@ modules:
       - employeemasterdatabulkupload.zip
       name: employeemasterdatabulkupload
       target-path: resources/
+    - artifacts:
+      - branch.zip
+      name: branch
+      target-path: resources/
 - name: employee
   type: html5
   path: app/employee
@@ -153,6 +157,16 @@ modules:
 - name: employeemasterdatabulkupload
   type: html5
   path: app/employee_master_data_bulk_upload
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: branch
+  type: html5
+  path: app/branch
   build-parameters:
     build-result: dist
     builder: custom

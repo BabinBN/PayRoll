@@ -1,0 +1,197 @@
+<mvc:View
+    controllerName="branch.controller.AddEditBranches"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:uxap="sap.uxap"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:tnt="sap.tnt"
+    xmlns:card="sap.f.cards"
+    xmlns:table="sap.ui.table"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:l="sap.ui.layout"
+    xmlns:field="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1">
+
+    <f:DynamicPage
+        id="page_AddEditLocation"
+        showFooter="{=!!${errors>/}.length}">
+
+        <f:title>
+            <f:DynamicPageTitle>
+
+                <f:heading>
+                    <Title text="Create Branch"/>
+                </f:heading>
+
+                <f:actions>
+                    <Button
+                        id="btnSave"
+                        type="Emphasized"
+                        text="Save"
+                        press="onPressSave"
+                        class="sapUiTinyMarginBegin"/>
+
+                    <Button
+                        id="btnSaveClose"
+                        type="Transparent"
+                        text="Save and Close"
+                        press="onPressSaveClose"/>
+
+                    <Button
+                        id="btnClose"
+                        type="Transparent"
+                        text="Close"
+                        class="sapUiTinyMarginBegin"
+                        press="handleClose"/>
+                </f:actions>
+
+                <f:navigationActions>
+                    <OverflowToolbarButton
+                        type="Transparent"
+                        icon="sap-icon://full-screen"
+                        press="handleFullScreen"
+                        id="enterFullScreenBtn"
+                        tooltip="Enter Full Screen Mode"
+                        visible="{= ${/actionButtonsInfo/midColumn/fullScreen} !== null }"/>
+                </f:navigationActions>
+
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:content>
+
+            <Panel>
+
+                <form:SimpleForm
+                    id="pt_form"
+                    editable="true"
+                    layout="ColumnLayout"
+                    labelSpanXL="4"
+                    labelSpanL="4"
+                    labelSpanM="12"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanXL="0"
+                    emptySpanL="0"
+                    emptySpanM="0"
+                    emptySpanS="0"
+                    columnsXL="3"
+                    columnsL="2"
+                    columnsM="2">
+
+                    <form:content>
+
+                        <Label
+                            text="Branch Name"
+                            required="true"/>
+
+                        <Input
+                            value="{branchesMdl>/name}"
+                            placeholder="Please enter branch name"
+                            />
+
+
+                        <Label
+                            text="Company"
+                            required="true"/>
+
+                        <ComboBox
+                            id="cb_CompanyFilter"
+                            placeholder="Please select company"
+                            items="{masterMdl>/companydt}"
+                            selectedKey="{branchesMdl>/company_id}"
+                            showSecondaryValues="true"
+                            change="changeCompany"
+                          >
+
+                            <core:ListItem
+                                key="{masterMdl>id}"
+                                text="{masterMdl>name}"/>
+
+                        </ComboBox>
+
+
+                        <Label
+                            text="Status"
+                            required="true"/>
+
+                        <ComboBox
+                            id="Status"
+                            placeholder="Please select status"
+                            items="{masterMdl>/statusdt}"
+                            selectedKey="{branchesMdl>/status}"
+                            showSecondaryValues="true"
+                            change="changeStatus"
+                           >
+
+                            <core:ListItem
+                                key="{masterMdl>value}"
+                                text="{masterMdl>description}"/>
+
+                        </ComboBox>
+
+
+                        <Label
+                            text="Location"
+                            required="true"/>
+
+                        <ComboBox
+                            id="cb_location"
+                            items="{masterMdl>/Locationdt}"
+                            placeholder="Select Location"
+                            selectedKey="{branchesMdl>/location}"
+                            change="changeLocation"
+                          >
+
+                            <core:Item
+                                key="{masterMdl>id}"
+                                text="{masterMdl>location}"/>
+
+                        </ComboBox>
+
+
+                        <Label text="Description"/>
+
+                        <TextArea
+                            value="{branchesMdl>/description}"
+                            placeholder="Please enter description"
+                            rows="3"/>
+
+                    </form:content>
+
+                </form:SimpleForm>
+
+            </Panel>
+
+        </f:content>
+
+
+        <f:footer>
+
+            <Bar>
+
+                <contentLeft>
+
+                    <Button
+                        id="btn_Location"
+                        class="sapUiTinyMarginTop"
+                        visible="{=!!${errors>/}.length}"
+                        icon="sap-icon://error"
+                        type="Negative"
+                        text="Errors"
+                        press=".handleMessagePopoverPress"
+                        ariaHasPopup="Dialog"/>
+
+                </contentLeft>
+
+            </Bar>
+
+        </f:footer>
+
+    </f:DynamicPage>
+
+</mvc:View>
+

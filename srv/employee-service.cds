@@ -7,16 +7,16 @@ using {Enumerators as enum} from '../db/Enumerators/Enumerators';
 service Employee {
     @cds.redirection.target
     @odata.draft.enabled
-    @restrict: [
-        {
-            grant: 'READ',
-            to   : 'EmployeeViewer'
-        },
-        {
-            grant: '*',
-            to   : 'EmployeeAdmin'
-        }
-    ]
+    // @restrict: [
+    //     {
+    //         grant: 'READ',
+    //         to   : 'EmployeeViewer'
+    //     },
+    //     {
+    //         grant: '*',
+    //         to   : 'EmployeeAdmin'
+    //     }
+    // ]
     entity Employees       as
         projection on Emp.Employees {
             *,
@@ -46,7 +46,7 @@ service Employee {
 
     // action bulkCreateEmployees(payloads: array of EmployeeInput) returns array of Employees;
 
-    @requires: 'EmployeeAdmin'
+    // @requires: 'EmployeeAdmin'
     action bulkCreateEmployees(payloads: array of EmployeeInput);
 
 
