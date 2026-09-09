@@ -118,6 +118,13 @@
           "target": [
             "TragetAddEditBranch"
           ]
+        },
+         {
+          "name": "update-branchs",
+          "pattern": "update-branch/{ID}",
+          "target": [
+            "TragetAddEditBranch"
+          ]
         }
       ],
       "targets": {

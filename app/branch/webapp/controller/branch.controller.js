@@ -84,7 +84,71 @@ sap.ui.define([
             this._mViewSettingsDialogs = {};
             this.errorData = []
         },
+        onPressDeleteBranch: async function () {
+            const oTable = this.byId("tableBranches");
+            const aSelectedItems = oTable.getSelectedItems();
 
+            console.log("Selected:", aSelectedItems.length);
+
+            if (!aSelectedItems.length) {
+                MessageToast.show("Please select a branch");
+                return;
+            }
+
+            const oModel = this.getOwnerComponent().getModel();
+            const aFailed = [];
+
+            for (const oItem of aSelectedItems) {
+                const oJsonContext = oItem.getBindingContext("branchesMdl");
+                const oBranch = oJsonContext.getObject();
+                const sID = oBranch.ID;
+
+                try {
+                    if (!sID) {
+                        throw new Error("Missing ID on selected branch");
+                    }
+
+                    console.log("Deleting Branch:", sID);
+
+                    // NOTE: wrap sID in quotes only if the key is Edm.String/Guid.
+                    // If ID is Edm.Int32/Int64, remove the quotes below.
+                    const oBinding = oModel.bindContext(`/Branchs('${sID}')`);
+                    const oODataContext = oBinding.getBoundContext();
+
+                    console.log("OData Path:", oODataContext.getPath());
+
+                    await oODataContext.delete("$direct");
+
+                    console.log("DELETE completed:", sID);
+
+                } catch (error) {
+                    console.error("DELETE ERROR for", sID, ":", error);
+                    aFailed.push({ id: sID, message: error.message || String(error) });
+                }
+            }
+
+            // Always refresh, even on partial failure, so the table reflects reality
+            try {
+                await this.advancedFilter();
+            } catch (refreshError) {
+                console.error("REFRESH ERROR after delete:", refreshError);
+            }
+
+            oTable.removeSelections(true);
+
+            if (aFailed.length === 0) {
+                MessageToast.show("Branch(es) deleted successfully");
+            } else if (aFailed.length === aSelectedItems.length) {
+                MessageBox.error(
+                    `Delete failed for all ${aFailed.length} branch(es). First error: ${aFailed[0].message}`
+                );
+            } else {
+                MessageBox.warning(
+                    `${aSelectedItems.length - aFailed.length} deleted, ${aFailed.length} failed.\n` +
+                    aFailed.map(f => `- ${f.id}: ${f.message}`).join("\n")
+                );
+            }
+        },
 
         advancedFilter: async function () {
             try {
@@ -114,9 +178,9 @@ sap.ui.define([
             console.log("Selected Branch:", oBranch);
 
             this.oRouter.navTo(
-                "addedit-branchs",
+                "update-branchs",
                 {
-                    branchId: oBranch.id,
+                    ID: oBranch.ID,
                     layout: "MidColumnFullScreen"
                 }
             );

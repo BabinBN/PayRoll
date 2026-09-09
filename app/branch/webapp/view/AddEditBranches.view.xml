@@ -122,7 +122,7 @@
                             id="Status"
                             placeholder="Please select status"
                             items="{masterMdl>/statusdt}"
-                            selectedKey="{branchesMdl>/status}"
+                            selectedKey="{branchesMdl>/status_ID}"
                             showSecondaryValues="true"
                             change="changeStatus"
                            >
