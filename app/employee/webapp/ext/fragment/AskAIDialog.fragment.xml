@@ -104,7 +104,7 @@
                         growing="true"
                         maxLength="1000"
                         placeholder="Ask something like: How is an employee's net salary calculated?"
-                        valueLiveUpdate="true" />
+                        valueLiveUpdate="true" liveChange=".onQuestionChange" />
 
                 </VBox>
 
