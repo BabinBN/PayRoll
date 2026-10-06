@@ -5,7 +5,7 @@
         "binding": {
           "type": "cf",
           "apiEndpoint": "https://api.cf.us10-001.hana.ondemand.com",
-          "org": "208a88e0trial",
+          "org": "8127be8etrial",
           "space": "dev",
           "instance": "PayRoll-db",
           "key": "PayRoll-db-key"

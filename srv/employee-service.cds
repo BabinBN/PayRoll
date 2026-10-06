@@ -52,7 +52,7 @@ service Employee {
 
     @readonly
     @cds.redirection.target
-    // @requires: 'EmployeeViewer'
+    //  @requires: 'EmployeeViewer'
     entity Status          as projection on Emp.Status;
 
     // @requires: 'EmployeeViewer'

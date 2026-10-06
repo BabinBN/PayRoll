@@ -1,0 +1,161 @@
+{
+	"_version": "1.89.0",
+	"sap.app": {
+		"id": "branch",
+		"type": "application",
+		"i18n": {
+			"bundleUrl": "i18n/i18n.properties",
+			"supportedLocales": [
+				""
+			]
+		},
+		"applicationVersion": {
+			"version": "0.0.1"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"resources": "resources.json",
+		"sourceTemplate": {
+			"id": "@sap/generator-fiori:basic",
+			"version": "1.32.0",
+			"toolsId": "5123f2ea-e832-4937-ad16-42af9121d9d8"
+		},
+		"dataSources": {
+			"mainService": {
+				"uri": "/odata/v4/Branch/",
+				"type": "OData",
+				"settings": {
+					"annotations": [],
+					"odataVersion": "4.0"
+				}
+			}
+		},
+		"crossNavigation": {
+			"inbounds": {
+				"Branch-manageBranch": {
+					"semanticObject": "Branch",
+					"action": "manageBranch",
+					"title": "{{Branch-manageBranch.flpTitle}}",
+					"signature": {
+						"parameters": {},
+						"additionalParameters": "allowed"
+					}
+				}
+			}
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"flexEnabled": true,
+		"dependencies": {
+			"minUI5Version": "1.152.0",
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "branch.i18n.i18n",
+					"supportedLocales": [
+						""
+					]
+				}
+			},
+			"": {
+				"dataSource": "mainService",
+				"preload": true,
+				"settings": {
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true
+				}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "css/style.css"
+				}
+			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"controlAggregation": "pages",
+				"controlId": "app",
+				"transition": "slide",
+				"type": "View",
+				"viewType": "XML",
+				"path": "branch.view",
+				"async": true,
+				"viewPath": "branch.view"
+			},
+			"routes": [
+				{
+					"name": "Routebranch",
+					"pattern": ":?query:",
+					"target": [
+						"Targetbranch"
+					]
+				},
+				{
+					"name": "addedit-branchs",
+					"pattern": "addedit-branch",
+					"target": [
+						"TragetAddEditBranch"
+					]
+				},
+				{
+					"name": "update-branchs",
+					"pattern": "update-branch/{ID}",
+					"target": [
+						"TragetAddEditBranch"
+					]
+				}
+			],
+			"targets": {
+				"Targetbranch": {
+					"id": "branch",
+					"name": "branch"
+				},
+				"TragetAddEditBranch": {
+					"id": "AddEditBranches",
+					"name": "AddEditBranches"
+				}
+			}
+		},
+		"rootView": {
+			"viewName": "branch.view.App",
+			"type": "XML",
+			"id": "App",
+			"async": true
+		},
+		"flexBundle": false
+	},
+	"sap.cloud": {
+		"public": true,
+		"service": "payroll_BN"
+	}
+}

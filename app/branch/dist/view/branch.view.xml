@@ -1,0 +1,275 @@
+<mvc:View
+    controllerName="branch.controller.branch"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+    xmlns:uxap="sap.uxap"
+    xmlns:tnt="sap.tnt"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:v="sap.ui.comp.variants"
+    xmlns:smartForm="sap.ui.comp.smartform"
+    xmlns:smartField="sap.ui.comp.smartfield"
+    xmlns:card="sap.f.cards"
+    xmlns:table="sap.ui.table"
+    xmlns:app="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:l="sap.ui.layout"
+>
+    <f:DynamicPage
+        id="page_Branches"
+        preserveHeaderStateOnScroll="true"
+        headerExpanded="true"
+        showFooter="{=!!${errors>/}.length}"
+    >
+        <!-- DynamicPage Title -->
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="Branches" />
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- DynamicPage Header -->
+        <f:header>
+            <f:DynamicPageHeader pinnable="true">
+                <fb:FilterBar
+                    id="filterbar"
+                    filterBarExpanded="true"
+                    search="advancedFilter"
+                    clear="clearAllFilters"
+                    useToolbar="false"
+                    showGoOnFB="true"
+                    showClearOnFB="true"
+                    showFilterConfiguration="false"
+                >
+                    <fb:filterItems>
+                        <!-- Company -->
+                        <fb:FilterItem
+                            name="A"
+                            label="Company"
+                            mandatory="true"
+                        >
+                            <fb:control>
+                                <ComboBox
+                                    id="sel_branCompany"
+                                    placeholder="Select Company"
+                                    items="{masterMdl>/companydt}"
+                                    selectedKey="{advancedFilterMdl>/company_id}"
+                                    change="onChangeCompany"
+                                >
+                                    <core:ListItem
+                                        key="{masterMdl>id}"
+                                        text="{masterMdl>name}"
+                                    />
+                                </ComboBox>
+                            </fb:control>
+                        </fb:FilterItem>
+
+                        <!-- Location -->
+                        <fb:FilterItem
+                            name="C"
+                            label="Location"
+                        >
+                            <fb:control>
+                                <ComboBox
+                                    id="cb_location_1"
+                                    items="{masterMdl>/Locationdt}"
+                                    placeholder="Select Location"
+                                    editable="{= ${advancedFilterMdl>/company_id} ? true : false}"
+                                    selectedKey="{advancedFilterMdl>/location_id}"
+                                    change="changeLocation"
+                                >
+                                    <core:Item
+                                        key="{masterMdl>id}"
+                                        text="{masterMdl>location}"
+                                    />
+                                </ComboBox>
+                            </fb:control>
+                        </fb:FilterItem>
+
+                        <!-- Status -->
+                        <fb:FilterItem
+                            name="B"
+                            label="Status"
+                        >
+                            <fb:control>
+                                <ComboBox
+                                    id="cb_status"
+                                    placeholder="Select Status"
+                                    editable="{= ${advancedFilterMdl>/company_id} ? true : false}"
+                                    items="{masterMdl>/statusdt}"
+                                    selectedKey="{advancedFilterMdl>/status}"
+                                >
+                                    <core:Item
+                                        key="{masterMdl>value}"
+                                        text="{masterMdl>description}"
+                                    />
+                                </ComboBox>
+                            </fb:control>
+                        </fb:FilterItem>
+                    </fb:filterItems>
+                </fb:FilterBar>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <!-- Content -->
+        <f:content>
+            <Table
+                id="tableBranches"
+                items="{branchesMdl>/}"
+                mode="MultiSelect"
+                selectionChange="onSelectionChange"
+                sticky="ColumnHeaders,HeaderToolbar"
+                inset="false"
+                class="sapUiSmallMarginTop"
+                growing="true"
+                growingScrollToLoad="true"
+                growingThreshold="20"
+            >
+                <!-- Header Toolbar -->
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <content>
+                            <Label
+                                design="Bold"
+                                text="Items ({= ${branchesMdl>/}.length})"
+                                visible="{= ${branchesMdl>/}.length >= 0}"
+                            />
+
+                            <ToolbarSpacer />
+
+                            <Button
+                                id="btn_CreateBranch"
+                                type="Ghost"
+                                text="Create"
+                                press="onPressCreateBranch"
+                                enabled="{= ${advancedFilterMdl>/system_id} !== 5 }"
+                            />
+
+                            <Button
+                                id="btn_DeleteBranch"
+                                type="Negative"
+                                text="Delete"
+                                icon="sap-icon://delete"
+                                press="onPressDeleteBranch"
+                                enabled="{= ${viewMdl>/hasSelection} }"
+                            />
+                        </content>
+                    </OverflowToolbar>
+                </headerToolbar>
+
+                <!-- Columns -->
+                <columns>
+                    <Column
+                        minScreenWidth="Desktop"
+                        demandPopin="true"
+                        popinDisplay="Inline"
+                    >
+                        <Label
+                            text="Name"
+                            design="Bold"
+                        />
+                    </Column>
+
+                    <Column
+                        minScreenWidth="Desktop"
+                        demandPopin="true"
+                        popinDisplay="Inline"
+                    >
+                        <Label
+                            text="Description"
+                            design="Bold"
+                        />
+                    </Column>
+
+                    <Column
+                        minScreenWidth="Desktop"
+                        demandPopin="true"
+                        popinDisplay="Inline"
+                    >
+                        <Label
+                            text="Location"
+                            design="Bold"
+                        />
+                    </Column>
+
+                    <Column
+                        minScreenWidth="Desktop"
+                        demandPopin="true"
+                        popinDisplay="Inline"
+                    >
+                        <Label
+                            text="Status"
+                            design="Bold"
+                        />
+                    </Column>
+                </columns>
+
+                <!-- Items -->
+                <items>
+                    <ColumnListItem
+                        type="Navigation"
+                        press=".onListItemPress"
+                    >
+                        <cells>
+                            <!-- Name -->
+                            <Text
+                                text="{branchesMdl>name}"
+                                wrapping="false"
+                            />
+
+                            <!-- Description -->
+                            <Text
+                                text="{branchesMdl>description}"
+                                wrapping="false"
+                            />
+                            <!-- Location -->
+                            <ComboBox
+                                placeholder="Select Location"
+                                items="{masterMdl>/Locationdt}"
+                                selectedKey="{branchesMdl>location}"
+                                change="onChangeStatus"
+                            >
+                                <core:Item
+                                    key="{masterMdl>id}"
+                                    text="{masterMdl>location}"
+                                />
+                            </ComboBox>
+
+                            <!-- Status -->
+                            <ComboBox
+                                placeholder="Select Status"
+                                items="{masterMdl>/statusdt}"
+                                selectedKey="{branchesMdl>status_ID}"
+                                change="onChangeStatus"
+                            >
+                                <core:Item
+                                    text="{masterMdl>description}"
+                                    key="{masterMdl>value}"
+                                />
+                            </ComboBox>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
+        </f:content>
+
+        <!-- Footer -->
+        <f:footer>
+            <Toolbar>
+                <Button
+                    id="btnBranches"
+                    visible="{=!!${errors>/}.length}"
+                    icon="sap-icon://error"
+                    type="Negative"
+                    text="Errors"
+                    press=".handleMessagePopoverPress"
+                    ariaHasPopup="Dialog"
+                />
+            </Toolbar>
+        </f:footer>
+    </f:DynamicPage>
+</mvc:View>

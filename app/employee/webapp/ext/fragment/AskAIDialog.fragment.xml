@@ -1,0 +1,179 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+
+    <Dialog
+        id="askAIDialog"
+        title="AI Assistant"
+        contentWidth="650px"
+        contentHeight="520px"
+        stretchOnPhone="true"
+        draggable="true"
+        resizable="true">
+
+        <customHeader>
+            <Toolbar>
+                <content>
+
+                    <core:Icon
+                        src="sap-icon://ai"
+                        size="1.3rem"
+                        class="sapUiTinyMarginBegin sapUiTinyMarginEnd" />
+
+                    <Title
+                        text="AI Assistant"
+                        level="H2" />
+
+                    <ToolbarSpacer />
+
+                    <ObjectStatus
+                        text="Ready"
+                        state="Success"
+                        icon="sap-icon://status-positive" />
+
+                </content>
+            </Toolbar>
+        </customHeader>
+
+        <content>
+
+            <VBox
+                class="sapUiMediumMargin">
+
+                <!-- Welcome Section -->
+                <VBox
+                    class="sapUiSmallMarginBottom">
+
+                    <Title
+                        text="How can I help you?"
+                        level="H3" />
+
+                    <Text
+                        text="Ask questions about employees, payroll, salary, deductions or other business data."
+                        wrapping="true"
+                        class="sapUiTinyMarginTop" />
+
+                </VBox>
+
+
+                <!-- Suggestions -->
+                <Label
+                    text="Try asking"
+                    class="sapUiSmallMarginBottom" />
+
+                <HBox
+                    wrap="Wrap"
+                    class="sapUiSmallMarginBottom">
+
+                    <Button
+                        text="Explain payroll"
+                        icon="sap-icon://hint"
+                        type="Transparent"
+                        press=".onSuggestionPress"
+                        class="sapUiTinyMarginEnd sapUiTinyMarginBottom" />
+
+                    <Button
+                        text="Salary details"
+                        icon="sap-icon://money-bills"
+                        type="Transparent"
+                        press=".onSuggestionPress"
+                        class="sapUiTinyMarginEnd sapUiTinyMarginBottom" />
+
+                    <Button
+                        text="Employee information"
+                        icon="sap-icon://employee"
+                        type="Transparent"
+                        press=".onSuggestionPress"
+                        class="sapUiTinyMarginEnd sapUiTinyMarginBottom" />
+
+                </HBox>
+
+
+                <!-- Question -->
+                <VBox class="sapUiSmallMarginBottom">
+
+                    <Label
+                        text="Your question"
+                        labelFor="questionInput"
+                        required="true" />
+
+                    <TextArea
+                        id="questionInput"
+                        width="100%"
+                        rows="4"
+                        growing="true"
+                        maxLength="1000"
+                        placeholder="Ask something like: How is an employee's net salary calculated?"
+                        valueLiveUpdate="true" />
+
+                </VBox>
+
+
+                <!-- AI Answer -->
+                <Panel
+                    id="answerPanel"
+                    headerText="AI Response"
+                    expandable="false"
+                    visible="true"
+                    class="sapUiSmallMarginTop">
+
+                    <content>
+
+                        <VBox
+                            class="sapUiSmallMargin">
+
+                            <HBox
+                                alignItems="Center"
+                                class="sapUiTinyMarginBottom">
+
+                                <core:Icon
+                                    src="sap-icon://ai"
+                                    size="1rem"
+                                    class="sapUiTinyMarginEnd" />
+
+                                <Text
+                                    text="Assistant"
+                                    class="sapUiTinyMarginEnd" />
+
+                            </HBox>
+
+                            <Text
+                                id="answerText"
+                                text="Your AI response will appear here."
+                                wrapping="true" />
+
+                        </VBox>
+
+                    </content>
+
+                </Panel>
+
+            </VBox>
+
+        </content>
+
+
+        <!-- Footer -->
+        <beginButton>
+
+            <Button
+                id="askButton"
+                text="Ask AI"
+                icon="sap-icon://ai"
+                type="Emphasized"
+                press=".onSendQuestion" />
+
+        </beginButton>
+
+        <endButton>
+
+            <Button
+                text="Close"
+                icon="sap-icon://decline"
+                press=".onCloseAI" />
+
+        </endButton>
+
+    </Dialog>
+
+</core:FragmentDefinition>

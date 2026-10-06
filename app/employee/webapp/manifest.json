@@ -71,7 +71,10 @@
       "extensions": {
         "sap.ui.controllerExtensions": {
           "sap.fe.templates.ListReport.ListReportController": {
-            "controllerName": "employee.ext.controller.ListReportExt"
+            "controllerNames": [
+              "employee.ext.controller.ListReportExt",
+              "employee.ext.controller.AIHandler"
+            ]
           }
         }
       }
@@ -149,7 +152,8 @@
                 "@com.sap.vocabularies.UI.v1.LineItem": {
                   "tableSettings": {
                     "type": "ResponsiveTable",
-                    "enableExport": true
+                    "enableExport": true,
+                    "personalization": true
                   },
                   "actions": {
                     "uploadexcel": {
@@ -157,6 +161,13 @@
                       "enabled": false,
                       "requiresSelection": false,
                       "text": "Upload Excel"
+                    },
+                    "AskAI": {
+                      "press": ".extension.employee.ext.controller.AIHandler.onAskAI",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Ask AI"
                     }
                   }
                 }
