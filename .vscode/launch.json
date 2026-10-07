@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run PayRoll-4",
+      "type": "java",
+      "request": "launch",
+      "mainClass": "customer.payroll.Application",
+      "projectName": "PayRoll",
+      "preLaunchTask": "Build PayRoll",
+      "cwd": "${workspaceFolder}",
+      "envFile": "${workspaceFolder}/.env4",
+      "args": [
+        "--spring.profiles.active=default"
+      ],
+      "env": {
+        "run.config": "{\"handlerId\":\"cap_run_config_handler_id\",\"runnableId\":\"{\\\"projectPath\\\":\\\"/home/user/projects/PayRoll\\\",\\\"profileName\\\":\\\"default\\\"}\"}"
+      }
+    },
+    {
+      "name": "CDS Debug - PayRoll",
+      "type": "java",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 9229,
+      "projectName": "PayRoll"
+    }
+  ]
+}

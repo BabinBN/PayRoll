@@ -38,3 +38,7 @@ management:
       enabled: true
     db:
       enabled: true
+omniroute:
+  url: "http://localhost:20128/v1/chat/completions"
+  api-key: "sk-9f83754c297219dc-b1f09c-fef5a569"
+  model: "auto/best-coding"
